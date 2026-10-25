@@ -32,5 +32,7 @@ export default defineConfig({
     '/work/national-fuel-pass': '/work',
     '/work/e-motoring': '/work',
     '/work/sq-sop-management': '/work',
+    '/work/websites/tellit': '/work',
+    '/work/websites/nbh': '/work',
   },
 });
