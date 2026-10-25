@@ -13,7 +13,8 @@ export default defineConfig({
   env: {
     schema: {
       RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
-      CONTACT_TO: envField.string({ context: 'server', access: 'secret', default: 'rmnanayakkara@yahoo.com' }),
+      // Resend's test sender only delivers to the Resend account's own email (milanraveen@gmail.com) until a domain is verified.
+      CONTACT_TO: envField.string({ context: 'server', access: 'secret', default: 'milanraveen@gmail.com' }),
       CONTACT_FROM: envField.string({ context: 'server', access: 'secret', default: 'Raveen.design <onboarding@resend.dev>' }),
     },
   },

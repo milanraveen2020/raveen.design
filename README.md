@@ -41,5 +41,5 @@ npm run build    # static output in dist/
 The contact form posts to `/api/contact` (`src/pages/api/contact.ts`), a Vercel function that emails each enquiry via [Resend](https://resend.com). Every other page stays static.
 
 1. Create a Resend API key and add it as `RESEND_API_KEY` in Vercel → Settings → Environment Variables (and in a local `.env`, see `.env.example`).
-2. Enquiries go to `CONTACT_TO` (default `rmnanayakkara@yahoo.com`), with the visitor's address as Reply-To.
+2. Enquiries go to `CONTACT_TO` (default `milanraveen@gmail.com`, the Resend account's email), with the visitor's address as Reply-To.
 3. Until a domain is verified in Resend, the sender is `onboarding@resend.dev`, which only delivers to the email the Resend account was created with. After verifying a domain, set `CONTACT_FROM`, e.g. `Raveen.design <hello@yourdomain.com>`.
