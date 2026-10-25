@@ -28,8 +28,16 @@ const { name, links, activeHref } = Astro.props;
 </div>
 
 <style>
-  .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 92px; display: flex; align-items: center; background: transparent; transition: background 360ms var(--ease-out); }
-  .site-header.is-scrolled { background: rgba(255,255,255,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 92px; display: flex; align-items: center; }
+  /* Frosted backdrop on its own layer, faded in on scroll. The blur stays set and only opacity changes,
+     because Safari can skip repainting a backdrop-filter that is switched on by a class. */
+  .site-header::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0;
+    background: rgba(255,250,248,.7); border-bottom: 1px solid rgba(23,25,43,.06);
+    -webkit-backdrop-filter: saturate(160%) blur(20px); backdrop-filter: saturate(160%) blur(20px);
+    transition: opacity 360ms var(--ease-out); }
+  .site-header.is-scrolled::before { opacity: 1; }
+  /* No backdrop-filter support: a near-solid bar so the nav stays readable. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .site-header::before { background: rgba(255,250,248,.96); } }
   .site-header-inner { width: min(calc(100% - 48px), var(--container)); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; }
   .site-header-mark { display: block; line-height: 0; }
   .site-header-mark :global(img) { display: block; width: auto; height: 52px; }
