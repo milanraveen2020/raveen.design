@@ -17,7 +17,7 @@ const { name, links, activeHref } = Astro.props;
 </header>
 <!-- The menu sits outside the header: nested inside it, this full-screen panel was sized to the
      header bar (76px) instead of the screen. -->
-<div id="site-menu" class="site-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden data-menu>
+<div id="site-menu" class="site-menu" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1" hidden data-menu>
   <div class="site-menu-top">
     <a href={links[0]?.href ?? '/'} class="site-header-mark" aria-label={name + ', home'}><Image src={logo} alt="" height={52} densities={[1, 2]} format="webp" /></a>
     <button type="button" class="site-header-btn" aria-label="Close menu" data-menu-close><Icon name="x" size={20} /></button>
@@ -36,17 +36,23 @@ const { name, links, activeHref } = Astro.props;
   .site-header-nav { display: flex; gap: 52px; }
   .site-header-btn { width: 48px; height: 48px; border-radius: 50%; border: none; background: var(--surface); box-shadow: var(--shadow-float); display: grid; place-items: center; color: var(--ink-900); cursor: pointer; }
   .site-header-open { display: none; }
-  .site-menu { position: fixed; inset: 0; z-index: 60; background: var(--canvas-blush); display: flex; flex-direction: column; padding: 7px max(24px, env(safe-area-inset-right)) max(40px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); overflow-y: auto; overscroll-behavior: contain; }
+  /* Same side gutters and top-bar height as the header, so the logo and button don't move when it opens */
+  .site-menu { position: fixed; inset: 0; z-index: 60; background: var(--canvas-blush); display: flex; flex-direction: column; padding: 7px 24px max(40px, env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; }
   .site-menu[hidden] { display: none; }
   .site-menu-top { height: 62px; display: flex; align-items: center; justify-content: space-between; }
-  .site-menu-nav { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 32px; }
+  .site-menu:focus { outline: none; }
+  /* Centred on the screen: auto margins centre it below the top bar; the bottom padding offsets the bar's height. */
+  .site-menu-nav { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-block: auto; padding: 0 0 36px; text-align: center; }
   @media (max-width: 991px) {
     .site-header { height: 76px; }
     .site-header-mark :global(img) { height: 42px; }
     .site-header-nav { display: none; }
     .site-header-open { display: grid; }
   }
-  @media (max-width: 479px) { .site-header-inner { width: min(calc(100% - 32px), var(--container)); } }
+  @media (max-width: 479px) {
+    .site-header-inner { width: min(calc(100% - 32px), var(--container)); }
+    .site-menu { padding-inline: 16px; }
+  }
 </style>
 <script>
   const header = document.querySelector<HTMLElement>('[data-site-header]');
@@ -58,23 +64,29 @@ const { name, links, activeHref } = Astro.props;
   onScroll();
   const desktop = window.matchMedia('(min-width: 992px)');
   const isOpen = () => !!menu && !menu.hidden;
-  const setOpen = (open: boolean) => {
+  // `keyboard` decides where focus goes: a tap focuses the panel itself (no focus ring),
+  // a keyboard press focuses the close/open button so keyboard users see where they are.
+  const setOpen = (open: boolean, keyboard = false) => {
     if (!menu || !openBtn) return;
     menu.hidden = !open;
     openBtn.setAttribute('aria-expanded', String(open));
     document.documentElement.style.overflow = open ? 'hidden' : '';
-    (open ? closeBtn : openBtn)?.focus();
+    if (open) (keyboard ? closeBtn : menu)?.focus();
+    else if (keyboard) openBtn.focus();
+    else (document.activeElement as HTMLElement | null)?.blur();
   };
-  openBtn?.addEventListener('click', () => setOpen(true));
-  closeBtn?.addEventListener('click', () => setOpen(false));
+  // A click from Enter/Space has detail 0; a real tap or mouse click has detail 1+.
+  openBtn?.addEventListener('click', (e) => setOpen(true, e.detail === 0));
+  closeBtn?.addEventListener('click', (e) => setOpen(false, e.detail === 0));
   // Keep keyboard focus inside the open menu; Escape closes it.
   document.addEventListener('keydown', (e) => {
     if (!isOpen() || !menu) return;
-    if (e.key === 'Escape') { setOpen(false); return; }
+    if (e.key === 'Escape') { setOpen(false, true); return; }
     if (e.key !== 'Tab') return;
     const items = [...menu.querySelectorAll<HTMLElement>('a, button')];
     const first = items[0], last = items[items.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    if (document.activeElement === menu) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
   // The menu only exists below 992px: close it if the window grows, so the page is never left scroll-locked.

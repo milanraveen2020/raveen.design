@@ -14,4 +14,7 @@ const { href, active = false, large = false } = Astro.props;
   .nav-link:hover, .nav-link:focus-visible { color: var(--ink-900); }
   .nav-link:hover .nav-link-dot, .nav-link:focus-visible .nav-link-dot, .nav-link[aria-current="page"] .nav-link-dot { transform: scale(1); }
   .nav-link:hover .nav-link-text, .nav-link:focus-visible .nav-link-text, .nav-link[aria-current="page"] .nav-link-text { transform: translateX(12px); }
+  /* Large (menu) links are centred: the dot sits outside the word so the word itself never shifts */
+  .nav-link--lg .nav-link-dot { left: -20px; width: 8px; height: 8px; margin-top: -4px; }
+  .nav-link--lg:hover .nav-link-text, .nav-link--lg:focus-visible .nav-link-text, .nav-link--lg[aria-current="page"] .nav-link-text { transform: none; }
 </style>

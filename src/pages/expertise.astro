@@ -9,7 +9,7 @@ import SkillMarquee from '../components/ds/SkillMarquee.astro';
 import { SKILL_GROUPS, SKILL_ROWS, TITLES } from '../data/site';
 ---
 <BaseLayout title={TITLES['/expertise']}>
-  <PageHero label="Expertise" title="Skills across design, development, and growth">
+  <PageHero label="Expertise" title="From brand to launch">
     <p class="ds-body-lg muted" style="max-width:58ch">My work covers the whole life of a website: brand, UI/UX-led design, fast development with a headless CMS, e-commerce, hosting, SEO, and the campaigns that bring in leads. Behind it all are ten years of UI/UX engineering on complex digital products.</p>
   </PageHero>
 
@@ -35,6 +35,8 @@ import { SKILL_GROUPS, SKILL_ROWS, TITLES } from '../data/site';
   </Section>
 </BaseLayout>
 <style>
+  /* Hairline in the illustrations' own mid blue, so the light-blue images have a soft edge */
+  :global(.group-media) :global(.media-frame) { border: 1px solid #A3BBDD; }
   .marquee { background: var(--canvas-blush); padding: 20px 0 140px; overflow: hidden; }
   .groups { display: flex; flex-direction: column; gap: 160px; }
   .group { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 96px; align-items: center; }
