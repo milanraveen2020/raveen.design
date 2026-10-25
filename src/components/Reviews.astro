@@ -16,7 +16,7 @@ const stars = Array.from({ length: 5 });
       <Reveal delay={80} class="rv-score">
         <span class="rv-score-num">{FIVERR_RATING.score}</span>
         <span class="stack" style="gap:6px">
-          <span class="rv-stars rv-stars--lg" aria-label={`${FIVERR_RATING.score} out of 5 stars`}>{stars.map(() => <Icon name="star" size={22} />)}</span>
+          <span class="rv-stars rv-stars--lg" role="img" aria-label={`${FIVERR_RATING.score} out of 5 stars`}>{stars.map(() => <Icon name="star" size={22} />)}</span>
           <span class="muted">from {FIVERR_RATING.count} reviews on Fiverr</span>
           <ExtLink href={PROFILE.fiverr}>Read all reviews</ExtLink>
         </span>
@@ -32,14 +32,14 @@ const stars = Array.from({ length: 5 });
           <span class="rv-name">{featured.name}</span>
           <span class="rv-meta">{featured.country} · {featured.service}</span>
         </span>
-        <span class="rv-stars" aria-label="5 out of 5 stars">{stars.map(() => <Icon name="star" size={16} />)}</span>
+        <span class="rv-stars" role="img" aria-label="5 out of 5 stars">{stars.map(() => <Icon name="star" size={16} />)}</span>
       </figcaption>
     </Reveal>
 
     <ul class="rv-list">
       {rest.map((r, i) => (
         <Reveal as="li" delay={i * 80} class="card rv-card">
-          <span class="rv-stars" aria-label="5 out of 5 stars">{stars.map(() => <Icon name="star" size={16} />)}</span>
+          <span class="rv-stars" role="img" aria-label="5 out of 5 stars">{stars.map(() => <Icon name="star" size={16} />)}</span>
           <blockquote class="rv-quote">“{r.quote}”</blockquote>
           <div class="rv-by">
             <span class="rv-avatar">{r.name[0].toUpperCase()}</span>
@@ -74,7 +74,7 @@ const stars = Array.from({ length: 5 });
   .rv-by { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .rv-by--light { margin-top: 40px; }
   .rv-avatar { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: var(--canvas-blush); color: var(--ink-900); font-weight: 600; }
-  .rv-by--light .rv-avatar { background: var(--accent-coral); color: #fff; }
+  .rv-by--light .rv-avatar { background: var(--accent-coral-strong); color: #fff; }
   .rv-name { font-weight: 600; color: var(--ink-900); }
   .rv-meta { font-size: 14px; color: var(--ink-500); }
   .rv-by--light .rv-name { color: #fff; }

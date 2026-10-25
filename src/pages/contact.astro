@@ -6,6 +6,7 @@ import Icon from '../components/ds/Icon.astro';
 import Tag from '../components/ds/Tag.astro';
 import TextField from '../components/ds/TextField.astro';
 import { INQUIRY, PROFILE, DESCRIPTIONS, TITLES } from '../data/site';
+import { LIMITS } from '../lib/contact';
 
 const links = [
   { label: 'LinkedIn', icon: 'linkedin', href: PROFILE.linkedin },
@@ -25,27 +26,28 @@ const site = Astro.site!;
 
       <div class="contact-grid enter" style="--delay:420ms">
         <div>
-          <FormStatus status="success" title="Thanks for reaching out." hidden data-form-sent>Your message has been submitted. I’ll get back to you when I can.</FormStatus>
+          <FormStatus status="success" title="Thanks for reaching out." hidden data-form-sent id="sent">Your message has been submitted. I’ll get back to you when I can.</FormStatus>
           <!-- Validates in the browser, then POSTs to /api/contact (src/pages/api/contact.ts), which emails it via Resend. -->
           <form novalidate class="contact-form" data-contact-form action="/api/contact" method="post">
-            <FormStatus status="error" class="span-2 form-error" hidden data-form-error>Your message couldn’t be sent. Please try again or contact me by email.</FormStatus>
+            <FormStatus status="error" class="span-2 form-error" hidden data-form-error id="send-error">Your message couldn’t be sent. Please try again or contact me by email.</FormStatus>
             <!-- Honeypot: hidden from people and screen readers; bots that fill it are ignored by the API. -->
             <div class="hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off" /></label></div>
-            <TextField label="Name" name="name" required />
-            <TextField label="Email" name="email" type="email" required />
+            <TextField label="Name" name="name" required maxlength={LIMITS.name} autocomplete="name" />
+            <TextField label="Email" name="email" type="email" required maxlength={LIMITS.email} autocomplete="email" />
+            <!-- Native radio buttons styled as chips: arrow keys, screen readers and no-JS posting all work out of the box. -->
             <fieldset class="span-2 types" data-field="type">
-              <legend>Project Type<span data-err-text></span></legend>
-              <input type="hidden" name="type" value="" />
-              <div role="radiogroup" aria-label="Project Type" class="chips">
+              <legend>Project Type<span aria-hidden="true" class="req"> *</span><span data-err-text></span></legend>
+              <div class="chips">
                 {INQUIRY.map((t) => (
-                  <button type="button" role="radio" aria-checked="false" data-value={t} class="chip">
+                  <label class="chip">
+                    <input type="radio" name="type" value={t} required class="chip-input" />
                     <Tag shape="chip" tone="surface" class="chip-tag">{t}</Tag>
-                  </button>
+                  </label>
                 ))}
               </div>
             </fieldset>
-            <TextField label="Project Summary" name="summary" multiline required class="span-2" />
-            <TextField label="Website or Reference URL (optional)" name="url" type="url" class="span-2" />
+            <TextField label="Project Summary" name="summary" multiline required maxlength={LIMITS.summary} class="span-2" />
+            <TextField label="Website or Reference URL (optional)" name="url" type="url" maxlength={LIMITS.url} autocomplete="url" class="span-2" />
             <div class="span-2" style="margin-top:8px"><Button type="submit" icon="send" class="submit" data-submit>Send message</Button></div>
           </form>
         </div>
@@ -73,18 +75,25 @@ const site = Astro.site!;
   .contact-grid { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); gap: 96px; margin-top: 96px; align-items: start; }
   .contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
   .contact-form[hidden] { display: none; }
+  /* Without JavaScript the API redirects to #sent or #send-error; :target shows the right message. */
+  .contact-grid :global(.form-status:target) { display: flex; }
+  .contact-grid:has(#sent:target) .contact-form { display: none; }
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .contact-form :global(.span-2) { grid-column: 1 / -1; }
   .contact-form :global(.form-error) { margin-bottom: 16px; }
   .types { border: 0; margin: 12px 0 20px; padding: 0; }
-  legend { padding: 0; margin-bottom: 14px; font-size: 14px; font-weight: 500; color: var(--ink-700); }
+  /* Same style as the text field labels (TextField.astro) */
+  legend { padding: 0; margin-bottom: 14px; font-size: 13px; font-weight: 600; color: var(--ink-700); }
+  .req { color: var(--accent-coral-text); }
   .types.has-error legend { color: var(--danger); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { border: 0; padding: 0; background: none; cursor: pointer; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center; }
-  .chip[aria-checked="true"] :global(.chip-tag) { --bg: var(--accent-coral); --fg: #fff; }
+  .chip { position: relative; cursor: pointer; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center; }
+  .chip-input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+  .chip-input:checked + :global(.chip-tag) { --bg: var(--accent-coral-strong); --fg: #fff; }
+  .chip-input:focus-visible + :global(.chip-tag) { outline: 2px solid var(--ink-900); outline-offset: 3px; }
   .contact-aside { display: flex; flex-direction: column; gap: 40px; }
   .contact-email { display: inline-block; margin-top: 10px; font-family: var(--font-display); font-size: 24px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink-900); text-decoration: none; word-break: break-all; }
-  .contact-email:hover { color: var(--accent-coral-dark); }
+  .contact-email:hover { color: var(--accent-coral-text); }
   .contact-links { display: flex; flex-direction: column; gap: 2px; margin-top: 10px; }
   .contact-link { gap: 12px; font-size: 17px; }
   .contact-legal { margin-top: 160px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--ink-500); }
@@ -100,12 +109,13 @@ const site = Astro.site!;
 </style>
 
 <script>
+  import { clean, validate } from '../lib/contact';
+
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
   const sent = document.querySelector<HTMLElement>('[data-form-sent]');
   const failed = document.querySelector<HTMLElement>('[data-form-error]');
   const submit = form?.querySelector<HTMLButtonElement>('[data-submit]');
-  const typeInput = form?.querySelector<HTMLInputElement>('input[name="type"]');
-  const chips = Array.from(form?.querySelectorAll<HTMLButtonElement>('[role="radio"]') ?? []);
+  const radios = Array.from(form?.querySelectorAll<HTMLInputElement>('input[name="type"]') ?? []);
 
   const setError = (name: string, msg?: string) => {
     const field = form?.querySelector<HTMLElement>(`[data-field="${name}"]`);
@@ -123,39 +133,52 @@ const site = Astro.site!;
     }
   };
 
-  chips.forEach((chip) => chip.addEventListener('click', () => {
-    chips.forEach((c) => c.setAttribute('aria-checked', String(c === chip)));
-    if (typeInput) typeInput.value = chip.dataset.value ?? '';
-    setError('type');
-  }));
+  radios.forEach((r) => r.addEventListener('change', () => setError('type')));
+
+  const resetSubmit = () => {
+    if (submit) { submit.disabled = false; submit.removeAttribute('aria-busy'); submit.querySelector('.btn-label')!.textContent = 'Send message'; }
+  };
+  // Move focus to the first field with an error (for the project type, the selected or first option).
+  const focusFirstError = () => {
+    const field = form?.querySelector<HTMLElement>('.has-error');
+    const target = field?.dataset.field === 'type'
+      ? (radios.find((r) => r.checked) ?? radios[0])
+      : field?.querySelector<HTMLElement>('input:not([type="hidden"]), textarea');
+    target?.focus();
+  };
+
+  // Without JavaScript the form posts normally and the API redirects back here with ?sent=1 or ?error=1.
+  const result = new URLSearchParams(location.search);
+  if (result.has('sent') && form && sent) { form.hidden = true; sent.hidden = false; sent.focus(); }
+  else if (result.has('error') && failed) { failed.hidden = false; failed.focus(); }
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = new FormData(form);
-    const v = (k: string) => String(data.get(k) ?? '').trim();
-    const errors: Record<string, string> = {};
-    if (!v('name')) errors.name = 'Please enter your name';
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email'))) errors.email = 'Please enter a valid email address';
-    if (!v('type')) errors.type = 'Please choose a project type';
-    if (v('summary').length < 10) errors.summary = 'Please add a short project summary';
+    const errors = validate(clean((k) => new FormData(form).get(k))) as Record<string, string>;
     ['name', 'email', 'type', 'summary'].forEach((k) => setError(k, errors[k]));
-    if (failed) failed.hidden = Object.keys(errors).length === 0;
-    if (Object.keys(errors).length) return;
+    // Field errors explain themselves; the banner is only for a failed send.
+    if (failed) failed.hidden = true;
+    if (Object.keys(errors).length) { focusFirstError(); return; }
 
     if (submit) { submit.disabled = true; submit.setAttribute('aria-busy', 'true'); submit.querySelector('.btn-label')!.textContent = 'Sending…'; }
     try {
-      const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
       if (!res.ok) {
         // The API re-checks the fields; show its messages next to the inputs if it rejects any.
         const body = await res.json().catch(() => ({}));
-        if (body.errors) Object.entries(body.errors as Record<string, string>).forEach(([k, msg]) => setError(k, msg));
+        if (body.errors) {
+          Object.entries(body.errors as Record<string, string>).forEach(([k, msg]) => setError(k, msg));
+          resetSubmit();
+          focusFirstError();
+          return;
+        }
         throw new Error(String(res.status));
       }
       form.hidden = true;
       if (sent) { sent.hidden = false; sent.focus(); }
     } catch {
-      if (failed) failed.hidden = false;
-      if (submit) { submit.disabled = false; submit.removeAttribute('aria-busy'); submit.querySelector('.btn-label')!.textContent = 'Send message'; }
+      if (failed) { failed.hidden = false; failed.focus(); }
+      resetSubmit();
     }
   });
 </script>

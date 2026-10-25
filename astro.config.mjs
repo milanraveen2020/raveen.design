@@ -2,6 +2,7 @@
 import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
+import securityHeaders from './integrations/security-headers.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +13,8 @@ export default defineConfig({
   trailingSlash: 'never',
   integrations: [
     sitemap({ filter: (page) => !/\/404\/?$/.test(page) }),
+    // After the Vercel adapter has written its routing file: add security headers to every response.
+    securityHeaders(),
   ],
   // Pages stay static; only /api/contact runs as a Vercel function (it opts out with `prerender = false`).
   adapter: vercel(),

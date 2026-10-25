@@ -12,7 +12,7 @@ html, body { overflow-x: clip; }
 html { scrollbar-gutter: stable; } /* keep width when the mobile menu locks scrolling, so nothing shifts */
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 a { color: var(--ink-900); }
-a:hover { color: var(--accent-coral-dark); }
+a:hover { color: var(--accent-coral-text); }
 img { display: block; }
 :focus-visible { outline: 2px solid var(--ink-900); outline-offset: 3px; } /* keyboard only; ink instead of the token's blue */
 .skip { position: absolute; left: 16px; top: -60px; z-index: 100; background: #fff; padding: 10px 16px; border-radius: 999px; }

@@ -52,7 +52,9 @@ const isLight = (hex: string) => {
 };
 ---
 <BaseLayout title={seoTitle} description={p.summary} type="article" image={shareShot(p.slug)} imageWidth={1440} imageHeight={900} imageAlt={`${p.name} website homepage`} schema={schema}>
-  {fontsHref ? <link slot="head" rel="stylesheet" href={fontsHref} /> : null}
+  {/* The client's fonts are only for the type samples further down, so load them without blocking the first paint. */}
+  {fontsHref ? <link slot="head" rel="preload" as="style" href={fontsHref} onload="this.onload=null;this.rel='stylesheet'" /> : null}
+  {fontsHref ? <noscript slot="head"><link rel="stylesheet" href={fontsHref} /></noscript> : null}
 
   <section class="hero">
     <div class="container">
@@ -65,7 +67,7 @@ const isLight = (hex: string) => {
       <p class="ds-body-lg muted hero-sum enter" style="--delay:200ms">{p.summary}</p>
       <div class="meta-row enter" style="--delay:260ms">
         <CaseMeta items={p.meta} class="meta" />
-        <CircleCta class="live" label={p.prototype ? 'Prototype' : 'Live site'} ariaLabel={'Open ' + p.name + ' website'} href={p.url} />
+        <CircleCta class="live" label={p.prototype ? 'Prototype' : 'Live site'} ariaLabel={(p.prototype ? 'Prototype' : 'Live site') + ': ' + p.name + ' (opens in a new tab)'} href={p.url} />
       </div>
     </div>
   </section>
@@ -253,7 +255,7 @@ const isLight = (hex: string) => {
   .steps a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: var(--radius-pill); background: var(--surface); color: var(--ink-900); font-size: 14px; font-weight: 500; text-decoration: none; box-shadow: var(--shadow-card); transition: background 220ms var(--ease-out), color 220ms var(--ease-out); }
   .steps a span { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--canvas-blush); font-size: 11px; font-weight: 600; }
   .steps a:hover { background: var(--ink-900); color: #fff; }
-  .steps a:hover span { background: var(--accent-coral); color: #fff; }
+  .steps a:hover span { background: var(--accent-coral-strong); color: #fff; }
 
   .flow { display: flex; flex-direction: column; gap: 120px; }
   .flow :global(.chapter) { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 48px; scroll-margin-top: 120px; }
@@ -270,9 +272,9 @@ const isLight = (hex: string) => {
   .list li:last-child { border-bottom: 1px solid var(--line); }
   .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 0; }
   .result { display: flex; flex-direction: column-reverse; gap: 8px; padding: 24px; border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-card); }
-  .result dd { margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 600; line-height: 1; letter-spacing: -0.03em; color: var(--accent-coral); }
+  .result dd { margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 600; line-height: 1; letter-spacing: -0.03em; color: var(--accent-coral-dark); }
   .result dt { font-size: 15px; color: var(--ink-700); }
-  .num { font-size: 12px; font-weight: 600; color: var(--accent-coral); padding-top: 4px; }
+  .num { font-size: 12px; font-weight: 600; color: var(--accent-coral-text); padding-top: 4px; }
 
   /* Journey: numbered steps joined by a line */
   .journey { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 16px; position: relative; }

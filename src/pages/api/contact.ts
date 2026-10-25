@@ -2,59 +2,64 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { RESEND_API_KEY, CONTACT_TO, CONTACT_FROM } from 'astro:env/server';
+import { INQUIRY } from '../../data/site';
+import { clean, validate, headerSafe, escapeHtml } from '../../lib/contact';
 
 export const prerender = false;
 
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+export const POST: APIRoute = async ({ request, url, redirect }) => {
+  // The page's script asks for JSON. A plain form post (JavaScript off) gets sent back to the contact page instead.
+  const wantsJson = (request.headers.get('accept') ?? '').includes('application/json');
+  const reply = (body: Record<string, unknown>, status = 200) =>
+    wantsJson
+      ? new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
+      : redirect(body.ok ? '/contact?sent=1#sent' : '/contact?error=1#send-error', 303);
 
-const escape = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  // Only accept posts from this site's own pages (blocks other sites from sending through the form).
+  const origin = request.headers.get('origin');
+  if (origin && origin !== url.origin) return reply({ ok: false, error: 'Forbidden' }, 403);
 
-export const POST: APIRoute = async ({ request }) => {
   let data: FormData;
-  try { data = await request.formData(); } catch { return json({ ok: false, error: 'Invalid form data' }, 400); }
-  const v = (k: string, max = 5000) => String(data.get(k) ?? '').trim().slice(0, max);
+  try { data = await request.formData(); } catch { return reply({ ok: false, error: 'Invalid form data' }, 400); }
 
   // Honeypot: real visitors never see or fill this field, bots usually do. Pretend it worked.
-  if (v('company')) return json({ ok: true });
+  if (String(data.get('company') ?? '').trim()) return reply({ ok: true });
 
-  const name = v('name', 120), email = v('email', 200), type = v('type', 120), summary = v('summary'), url = v('url', 500);
-  const errors: Record<string, string> = {};
-  if (!name) errors.name = 'Please enter your name';
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errors.email = 'Please enter a valid email address';
-  if (!type) errors.type = 'Please choose a project type';
-  if (summary.length < 10) errors.summary = 'Please add a short project summary';
-  if (Object.keys(errors).length) return json({ ok: false, errors }, 422);
+  const e = clean((k) => data.get(k));
+  const errors = validate(e, INQUIRY);
+  if (Object.keys(errors).length) return reply({ ok: false, errors }, 422);
 
   if (!RESEND_API_KEY) {
     console.error('[contact] RESEND_API_KEY is not set');
-    return json({ ok: false, error: 'Email is not configured' }, 500);
+    return reply({ ok: false, error: 'Email is not configured' }, 500);
   }
 
-  const rows: [string, string][] = [['Name', name], ['Email', email], ['Project type', type], ['Website / reference', url || '—']];
+  const name = headerSafe(e.name);
+  const rows: [string, string][] = [['Name', e.name], ['Email', e.email], ['Project type', e.type], ['Website / reference', e.url || '—']];
   const html = `
     <div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#17192B">
       <h2 style="margin:0 0 16px">New enquiry from raveen.design</h2>
       <table cellpadding="6" style="border-collapse:collapse">
-        ${rows.map(([k, val]) => `<tr><td style="color:#666;vertical-align:top">${k}</td><td>${escape(val)}</td></tr>`).join('')}
+        ${rows.map(([k, val]) => `<tr><td style="color:#666;vertical-align:top">${k}</td><td>${escapeHtml(val)}</td></tr>`).join('')}
       </table>
       <h3 style="margin:24px 0 8px">Project summary</h3>
-      <p style="white-space:pre-wrap;margin:0">${escape(summary)}</p>
+      <p style="white-space:pre-wrap;margin:0">${escapeHtml(e.summary)}</p>
     </div>`;
-  const text = rows.map(([k, val]) => `${k}: ${val}`).join('\n') + `\n\nProject summary:\n${summary}`;
+  const text = rows.map(([k, val]) => `${k}: ${val}`).join('\n') + `\n\nProject summary:\n${e.summary}`;
 
   const resend = new Resend(RESEND_API_KEY);
   const { error } = await resend.emails.send({
     from: CONTACT_FROM,
     to: CONTACT_TO,
-    replyTo: `${name} <${email}>`,
-    subject: `New enquiry: ${type} — ${name}`,
+    // Name and type are cleaned for header use; the address already passed the email check (no spaces, one @).
+    replyTo: `${name} <${e.email}>`,
+    subject: `New enquiry: ${e.type} — ${name}`,
     html,
     text,
   });
   if (error) {
     console.error('[contact] Resend error', error);
-    return json({ ok: false, error: 'Could not send email' }, 502);
+    return reply({ ok: false, error: 'Could not send email' }, 502);
   }
-  return json({ ok: true });
+  return reply({ ok: true });
 };

@@ -10,7 +10,7 @@ const classes = ['btn', 'btn--' + variant, 'btn--' + size, fullWidth && 'btn--fu
   <button type={type} disabled={disabled} class:list={classes} {...rest}><span class="btn-label"><slot /></span>{icon ? <span class="btn-icon"><Icon name={icon} size={18} /></span> : null}</button>
 )}
 <style>
-  .btn { --bg: var(--accent-coral); --bg-hover: var(--accent-coral-dark); --fg: var(--text-on-accent);
+  .btn { --bg: var(--accent-coral-strong); --bg-hover: var(--accent-coral-text); --fg: var(--text-on-accent);
     display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 56px; padding: 0 30px;
     border-radius: var(--radius-pill); border: none; background: var(--bg); color: var(--fg);
     font-family: var(--font-body); font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; transition: background 240ms ease-out; }

@@ -4,7 +4,7 @@ body{margin:0;font-family:var(--font-body);font-size:var(--size-body-md);line-he
 h1,h2,h3,h4{font-family:var(--font-display);font-weight:var(--weight-medium);color:var(--text-heading);margin:0;text-wrap:balance}
 p{margin:0;text-wrap:pretty}
 a{color:var(--text-heading);text-decoration-thickness:1px;text-underline-offset:3px}
-a:hover{color:var(--accent-coral)}
+a:hover{color:var(--accent-coral-text)}
 :focus-visible{outline:3px solid var(--focus);outline-offset:3px}
 img{display:block;max-width:100%}
 .ds-display-hero{font-family:var(--font-display);font-weight:500;font-size:var(--size-display-hero);line-height:var(--lh-display);letter-spacing:var(--tracking-display);color:var(--text-heading)}
