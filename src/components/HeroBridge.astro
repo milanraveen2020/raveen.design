@@ -4,11 +4,14 @@
 import Reveal from './Reveal.astro';
 import Button from './ds/Button.astro';
 import RotatingCue from './ds/RotatingCue.astro';
+import ToolList from './ToolList.astro';
 ---
 <section class="bridge" aria-labelledby="bridge-title">
   <span class="bridge-seam" aria-hidden="true"></span>
 
   <div class="container bridge-inner">
+    <Reveal class="bridge-tools"><ToolList /></Reveal>
+
     <Reveal class="bridge-head">
       <span class="label">Web design & development</span>
       <h2 id="bridge-title" class="ds-heading-xl bridge-title">I design and build websites <span class="accent">that work for your business.</span></h2>
@@ -25,10 +28,13 @@ import RotatingCue from './ds/RotatingCue.astro';
 </section>
 
 <style>
-  .bridge { position: relative; background: var(--canvas-blush); padding: 120px 0 72px; overflow: hidden; }
+  .bridge { position: relative; background: var(--canvas-blush); padding: 56px 0 72px; overflow: hidden; }
   /* The hero's seam, continued: fades in from the face edge and runs to the scroll cue */
   .bridge-seam { position: absolute; left: 50%; top: 0; bottom: 72px; width: 1px; background: linear-gradient(var(--line-strong), var(--line) 30%, var(--line) 85%, transparent); }
   .bridge-inner { position: relative; display: flex; flex-direction: column; align-items: center; }
+
+  /* Tools sit right under the portrait, centred on the seam */
+  .bridge-inner :global(.bridge-tools) { background: var(--canvas-blush); padding: 8px; margin-bottom: 96px; }
 
   /* Centred statement on the line (blush backing hides the seam behind the text) */
   .bridge-inner :global(.bridge-head) { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; background: var(--canvas-blush); padding: 24px 8px; }
@@ -41,7 +47,8 @@ import RotatingCue from './ds/RotatingCue.astro';
 
   /* Phones: drop the seam and cue */
   @media (max-width: 767px) {
-    .bridge { padding: 72px 0 80px; }
+    .bridge { padding: 40px 0 80px; }
+    .bridge-inner :global(.bridge-tools) { padding: 0; margin-bottom: 64px; }
     .bridge-seam, .bridge-cue { display: none; }
     .bridge-inner :global(.bridge-head) { padding: 0; }
     .bridge-inner :global(.bridge-actions) { margin-top: 40px; padding: 0; }

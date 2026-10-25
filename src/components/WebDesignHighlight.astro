@@ -1,13 +1,10 @@
 ---
-// Home band for the main line of work: the end-to-end process and the tools.
+// Home band for the main line of work: the end-to-end process.
 import Section from './Section.astro';
 import SectionHead from './SectionHead.astro';
 import Reveal from './Reveal.astro';
 import ProcessSteps from './ProcessSteps.astro';
-import Tag from './ds/Tag.astro';
-import Icon from './ds/Icon.astro';
 import { WEB_DESIGN } from '../data/site';
-import { TECH_LOGOS } from '../data/logos';
 ---
 <Section bg="cream" id="web-design" top={140} bottom={160}>
   <div class="container">
@@ -17,26 +14,6 @@ import { TECH_LOGOS } from '../data/logos';
     </div>
 
     <ProcessSteps class="wd-steps" />
-
-
-    <div class="wd-stack">
-      <Reveal class="stack" style="gap:14px">
-        <span class="label">Tools and technology</span>
-        <ul class="wd-tags">
-          {WEB_DESIGN.stack.map((t) => {
-            const logo = TECH_LOGOS[t];
-            return (
-              <li><Tag shape="chip" tone="surface" class="wd-tool">
-                {logo
-                  ? <svg class="wd-logo" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style={`color:${logo.color}`}><path d={logo.path} fill="currentColor" /></svg>
-                  : <Icon name="credit-card" size={18} class="wd-logo" />}
-                {t}
-              </Tag></li>
-            );
-          })}
-        </ul>
-      </Reveal>
-    </div>
   </div>
 </Section>
 
@@ -44,16 +21,9 @@ import { TECH_LOGOS } from '../data/logos';
   .wd-head { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 64px; align-items: end; }
   .wd-lead { max-width: 52ch; }
   .wd-head + :global(.wd-steps) { margin-top: 96px; }
-  .wd-stack { margin-top: 80px; }
-  .wd-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .wd-tags :global(.wd-tool) { gap: 10px; padding: 10px 18px 10px 14px; }
-  .wd-tags :global(.wd-logo) { flex-shrink: 0; }
 
   @media (max-width: 991px) {
     .wd-head { grid-template-columns: 1fr; gap: 24px; }
     .wd-head + :global(.wd-steps) { margin-top: 48px; }
-  }
-  @media (max-width: 767px) {
-    .wd-stack { margin-top: 56px; }
   }
 </style>

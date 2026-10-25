@@ -14,16 +14,19 @@ const { name, links, activeHref } = Astro.props;
     </nav>
     <button type="button" class="site-header-btn site-header-open" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu" data-menu-open><Icon name="menu" size={20} /></button>
   </div>
-  <div id="site-menu" class="site-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden data-menu>
-    <div class="site-menu-top">
-      <a href={links[0]?.href ?? '/'} class="site-header-mark" aria-label={name + ', home'}><Image src={logo} alt="" height={52} densities={[1, 2]} format="webp" /></a>
-      <button type="button" class="site-header-btn" aria-label="Close menu" data-menu-close><Icon name="x" size={20} /></button>
-    </div>
-    <nav aria-label="Main" class="site-menu-nav">
-      {links.map((l) => <NavLink href={l.href} active={l.href === activeHref} large>{l.label}</NavLink>)}
-    </nav>
-  </div>
 </header>
+<!-- The menu sits outside the header: nested inside it, this full-screen panel was sized to the
+     header bar (76px) instead of the screen. -->
+<div id="site-menu" class="site-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden data-menu>
+  <div class="site-menu-top">
+    <a href={links[0]?.href ?? '/'} class="site-header-mark" aria-label={name + ', home'}><Image src={logo} alt="" height={52} densities={[1, 2]} format="webp" /></a>
+    <button type="button" class="site-header-btn" aria-label="Close menu" data-menu-close><Icon name="x" size={20} /></button>
+  </div>
+  <nav aria-label="Menu" class="site-menu-nav">
+    {links.map((l) => <NavLink href={l.href} active={l.href === activeHref} large>{l.label}</NavLink>)}
+  </nav>
+</div>
+
 <style>
   .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 92px; display: flex; align-items: center; background: transparent; transition: background 360ms var(--ease-out); }
   .site-header.is-scrolled { background: rgba(255,255,255,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
@@ -33,10 +36,10 @@ const { name, links, activeHref } = Astro.props;
   .site-header-nav { display: flex; gap: 52px; }
   .site-header-btn { width: 48px; height: 48px; border-radius: 50%; border: none; background: var(--surface); box-shadow: var(--shadow-float); display: grid; place-items: center; color: var(--ink-900); cursor: pointer; }
   .site-header-open { display: none; }
-  .site-menu { position: fixed; inset: 0; z-index: 60; background: var(--canvas-blush); display: flex; flex-direction: column; padding: 14px 24px 40px; }
+  .site-menu { position: fixed; inset: 0; z-index: 60; background: var(--canvas-blush); display: flex; flex-direction: column; padding: 7px max(24px, env(safe-area-inset-right)) max(40px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); overflow-y: auto; overscroll-behavior: contain; }
   .site-menu[hidden] { display: none; }
   .site-menu-top { height: 62px; display: flex; align-items: center; justify-content: space-between; }
-  .site-menu-nav { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+  .site-menu-nav { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 32px; }
   @media (max-width: 991px) {
     .site-header { height: 76px; }
     .site-header-mark :global(img) { height: 42px; }
@@ -53,6 +56,8 @@ const { name, links, activeHref } = Astro.props;
   const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 40);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+  const desktop = window.matchMedia('(min-width: 992px)');
+  const isOpen = () => !!menu && !menu.hidden;
   const setOpen = (open: boolean) => {
     if (!menu || !openBtn) return;
     menu.hidden = !open;
@@ -62,5 +67,19 @@ const { name, links, activeHref } = Astro.props;
   };
   openBtn?.addEventListener('click', () => setOpen(true));
   closeBtn?.addEventListener('click', () => setOpen(false));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu && !menu.hidden) setOpen(false); });
+  // Keep keyboard focus inside the open menu; Escape closes it.
+  document.addEventListener('keydown', (e) => {
+    if (!isOpen() || !menu) return;
+    if (e.key === 'Escape') { setOpen(false); return; }
+    if (e.key !== 'Tab') return;
+    const items = [...menu.querySelectorAll<HTMLElement>('a, button')];
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  // The menu only exists below 992px: close it if the window grows, so the page is never left scroll-locked.
+  desktop.addEventListener('change', (e) => { if (e.matches && isOpen()) setOpen(false); });
+  // Closing on link tap also resets state when the browser restores this page from its back/forward cache.
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { if (menu) menu.hidden = true; document.documentElement.style.overflow = ''; }));
+  window.addEventListener('pageshow', () => { if (isOpen()) setOpen(false); });
 </script>
