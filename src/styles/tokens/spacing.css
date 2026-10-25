@@ -1,0 +1,16 @@
+:root{
+--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;--space-15:60px;--space-20:80px;--space-25:100px;--space-30:120px;--space-40:160px;--space-50:200px;
+--container:72rem;/* @kind spacing */
+--container-narrow:64rem;/* @kind spacing */
+
+--gutter:clamp(1rem,2.4vw,2rem);/* @kind spacing */
+
+--grid-gap:24px;/* @kind spacing */
+
+--section-space:clamp(5.5rem,11vw,12.5rem);/* @kind spacing */
+
+--header-height:92px;/* @kind spacing */
+
+--target-min:44px;/* @kind spacing */
+
+}

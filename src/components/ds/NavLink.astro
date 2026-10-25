@@ -1,0 +1,17 @@
+---
+interface Props { href: string; active?: boolean; large?: boolean }
+const { href, active = false, large = false } = Astro.props;
+---
+<a href={href} aria-current={active ? 'page' : undefined} class:list={['nav-link', large && 'nav-link--lg']}>
+  <span aria-hidden="true" class="nav-link-dot"></span>
+  <span class="nav-link-text"><slot /></span>
+</a>
+<style>
+  .nav-link { position: relative; display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-body); font-size: 15px; font-weight: 500; color: var(--ink-900); text-decoration: none; }
+  .nav-link--lg { font-size: 44px; font-family: var(--font-display); letter-spacing: -0.03em; }
+  .nav-link-dot { position: absolute; left: 0; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--accent-coral); transform: scale(0); transition: transform 260ms var(--ease-out); }
+  .nav-link-text { transition: transform 260ms var(--ease-out); }
+  .nav-link:hover, .nav-link:focus-visible { color: var(--ink-900); }
+  .nav-link:hover .nav-link-dot, .nav-link:focus-visible .nav-link-dot, .nav-link[aria-current="page"] .nav-link-dot { transform: scale(1); }
+  .nav-link:hover .nav-link-text, .nav-link:focus-visible .nav-link-text, .nav-link[aria-current="page"] .nav-link-text { transform: translateX(12px); }
+</style>

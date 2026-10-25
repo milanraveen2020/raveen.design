@@ -1,0 +1,20 @@
+---
+// Counter-moving skill rows. The wrapping page drives `--p` (0–1 scroll progress) via script.
+interface Props { rows: string[][]; class?: string }
+const { rows, class: cls } = Astro.props;
+---
+<div class:list={['skill-marquee', cls]} data-skill-marquee>
+  <ul class="sr-only">{rows.flat().map((s) => <li>{s}</li>)}</ul>
+  {rows.map((row, ri) => (
+    <div aria-hidden="true" data-skill-track data-dir={ri % 2 === 0 ? 1 : -1} class="skill-track">
+      {row.map((s) => <><span class="skill-word">{s}</span><span class="skill-dot"></span></>)}
+    </div>
+  ))}
+</div>
+<style>
+  .skill-marquee { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: clamp(8px, 1.5vw, 20px); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: -1px; padding: 0; }
+  .skill-track { display: flex; width: max-content; align-items: center; gap: clamp(24px, 3vw, 48px); padding-inline: 24px; align-self: center; will-change: transform; }
+  .skill-word { font-family: var(--font-display); font-weight: 500; font-size: var(--size-heading-xl); line-height: 1.12; letter-spacing: -0.03em; color: var(--ink-900); white-space: nowrap; }
+  .skill-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent-coral); flex-shrink: 0; }
+</style>

@@ -1,0 +1,21 @@
+---
+interface Props { items: { label: string; value: string; href?: string }[]; class?: string }
+const { items, class: cls } = Astro.props;
+const n = items.length || 3;
+---
+<dl class:list={['case-meta', cls]} style={`--cols:${Math.min(n, 4)};--cols-c:${Math.min(n, 2)}`}>
+  {items.map((it) => (
+    <div class="case-meta-item">
+      <dt>{it.label}</dt>
+      <dd>{it.href ? <a href={it.href} target="_blank" rel="noreferrer">{it.value}</a> : it.value}</dd>
+    </div>
+  ))}
+</dl>
+<style>
+  .case-meta { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, max-content)); column-gap: 64px; row-gap: 24px; margin: 0; }
+  .case-meta-item { display: flex; flex-direction: column; gap: 8px; }
+  dt { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); }
+  dd { margin: 0; font-size: 18px; font-weight: 500; color: var(--ink-900); }
+  @media (max-width: 991px) { .case-meta { grid-template-columns: repeat(var(--cols-c), minmax(0, max-content)); } }
+  @media (max-width: 767px) { .case-meta { grid-template-columns: minmax(0, max-content); } }
+</style>

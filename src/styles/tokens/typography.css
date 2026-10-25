@@ -1,0 +1,33 @@
+:root{
+--font-display:"Sora","Outfit",sans-serif;
+--font-body:"DM Sans","Inter",sans-serif;
+--weight-regular:400;/* @kind other */
+--weight-medium:500;/* @kind other */
+--weight-semibold:600;/* @kind other */
+
+/* Fluid scale: mobile → large desktop (see reference §4.2) */
+--size-display-hero:clamp(3.375rem,10.2vw,9.75rem);
+--size-display-page:clamp(2.875rem,8.4vw,7.5rem);
+--size-display-footer:clamp(2.75rem,7.8vw,7rem);
+--size-heading-xl:clamp(2.125rem,4.6vw,4rem);
+--size-heading-lg:clamp(1.75rem,3.1vw,2.625rem);
+--size-heading-md:clamp(1.375rem,2.2vw,1.875rem);
+--size-body-lg:clamp(1.125rem,1.5vw,1.375rem);
+--size-body-md:1rem;--size-body-sm:.875rem;--size-label:.75rem;
+--lh-display:1;/* @kind other */
+--lh-display-page:1.02;/* @kind other */
+--lh-heading-xl:1.12;/* @kind other */
+--lh-heading-lg:1.2;/* @kind other */
+--lh-heading-md:1.25;/* @kind other */
+--lh-body-lg:1.5;/* @kind other */
+--lh-body:1.55;/* @kind other */
+--lh-body-sm:1.5;/* @kind other */
+--lh-label:1.25;/* @kind other */
+
+--tracking-display:-0.035em;/* @kind other */
+--tracking-heading:-0.025em;/* @kind other */
+--tracking-heading-md:-0.015em;/* @kind other */
+--tracking-label:0.08em;/* @kind other */
+
+--measure:66ch;/* @kind other */
+}

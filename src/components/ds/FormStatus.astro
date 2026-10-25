@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+interface Props { status?: 'success' | 'error'; title?: string; class?: string; [key: string]: any }
+const { status = 'success', title, class: cls, ...rest } = Astro.props;
+const ok = status === 'success';
+---
+<div role={ok ? 'status' : 'alert'} tabindex="-1" class:list={['form-status', ok ? 'form-status--ok' : 'form-status--err', cls]} {...rest}>
+  <span class="form-status-icon"><Icon name={ok ? 'circle-check' : 'circle-alert'} size={22} /></span>
+  <div class="form-status-body">
+    <strong>{title || (ok ? 'Message sent' : 'Something went wrong')}</strong>
+    {Astro.slots.has('default') ? <span><slot /></span> : null}
+  </div>
+</div>
+<style>
+  .form-status { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-float); }
+  .form-status[hidden] { display: none; }
+  .form-status-icon { padding-top: 1px; color: var(--success); }
+  .form-status--err .form-status-icon { color: var(--danger); }
+  .form-status-body { display: flex; flex-direction: column; gap: 4px; }
+  strong { font-family: var(--font-display); font-weight: 500; font-size: 18px; color: var(--ink-900); }
+  .form-status-body span { font-size: 15px; color: var(--ink-700); }
+</style>

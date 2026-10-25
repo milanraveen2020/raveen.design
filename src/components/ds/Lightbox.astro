@@ -1,0 +1,43 @@
+---
+// One shared lightbox per page. Any <MediaFrame zoomable> opens it.
+import Icon from './Icon.astro';
+---
+<div class="lightbox" role="dialog" aria-modal="true" aria-label="Image" hidden data-lightbox>
+  <button type="button" aria-label="Close" class="lightbox-close" data-lightbox-close><Icon name="x" size={20} /></button>
+  <figure class="lightbox-body">
+    <div class="lightbox-frame"><img alt="" data-lightbox-img /></div>
+    <figcaption data-lightbox-caption></figcaption>
+  </figure>
+</div>
+<style>
+  .lightbox { position: fixed; inset: 0; z-index: 80; background: rgba(23,25,43,.88); display: grid; place-items: center; padding: clamp(16px, 5vw, 72px); animation: reveal-up 360ms var(--ease-out); }
+  .lightbox[hidden] { display: none; }
+  .lightbox-close { position: absolute; top: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; border: none; background: var(--surface); color: var(--ink-900); display: grid; place-items: center; cursor: pointer; }
+  .lightbox-body { width: min(100%, 1100px); margin: 0; }
+  .lightbox-frame { aspect-ratio: 16 / 10; border-radius: var(--radius-lg); overflow: hidden; background: var(--canvas-cream); }
+  .lightbox-frame img { width: 100%; height: 100%; object-fit: cover; }
+  figcaption { margin: 14px 0 0; color: #fff; font-size: 14px; font-weight: 500; }
+</style>
+<script>
+  const box = document.querySelector<HTMLElement>('[data-lightbox]');
+  const img = box?.querySelector<HTMLImageElement>('[data-lightbox-img]');
+  const cap = box?.querySelector<HTMLElement>('[data-lightbox-caption]');
+  const closeBtn = box?.querySelector<HTMLButtonElement>('[data-lightbox-close]');
+  let opener: HTMLElement | null = null;
+  const close = () => { if (!box || box.hidden) return; box.hidden = true; document.documentElement.style.overflow = ''; opener?.focus(); };
+  document.querySelectorAll<HTMLElement>('[data-lightbox-src]').forEach((el) => {
+    el.addEventListener('click', () => {
+      if (!box || !img || !cap) return;
+      opener = el;
+      img.src = el.dataset.lightboxSrc || '';
+      img.alt = el.dataset.lightboxAlt || '';
+      cap.textContent = el.dataset.lightboxTitle || '';
+      box.setAttribute('aria-label', el.dataset.lightboxTitle || 'Image');
+      box.hidden = false;
+      document.documentElement.style.overflow = 'hidden';
+      closeBtn?.focus();
+    });
+  });
+  box?.addEventListener('click', (e) => { if (!(e.target as HTMLElement).closest('.lightbox-body')) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+</script>

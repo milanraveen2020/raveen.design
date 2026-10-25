@@ -1,0 +1,36 @@
+---
+// A website shown as a desktop browser window with a phone overlapping it, on the site's own brand colour.
+import { desktopShot, mobileShot } from '../data/websites';
+interface Props { slug: string; name: string; brand: string; ratio?: string; ratioMobile?: string; radius?: string; eager?: boolean; class?: string }
+const { slug, name, brand, ratio = '625 / 580', ratioMobile, radius = 'var(--radius-lg)', eager = false, class: cls } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
+---
+<div class:list={['mock', cls]} style={`--brand:${brand};--ratio:${ratio};--ratio-m:${ratioMobile ?? ratio};--radius:${radius}`}>
+  <div class="mock-inner">
+    <div class="mock-desktop">
+      <span class="mock-bar" aria-hidden="true"><i></i><i></i><i></i></span>
+      <img src={desktopShot(slug)} alt={`${name} website on desktop`} width="1440" height="900" loading={loading} decoding="async" />
+    </div>
+    <div class="mock-phone">
+      <img src={mobileShot(slug)} alt={`${name} website on mobile`} width="390" height="844" loading={loading} decoding="async" />
+    </div>
+  </div>
+</div>
+<style>
+  .mock { position: relative; width: 100%; aspect-ratio: var(--ratio); border-radius: var(--radius); overflow: hidden;
+    background: radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--brand) 70%, #fff 30%), var(--brand) 70%); }
+  .mock-inner { position: absolute; inset: 0; transition: transform 800ms var(--ease-out); }
+  :global([data-hover-card]:hover) .mock-inner { transform: scale(1.025); }
+  .mock-desktop { position: absolute; left: 7%; top: 50%; width: 82%; transform: translateY(-56%); border-radius: 10px; overflow: hidden; background: #fff;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .45), 0 0 0 1px rgba(0, 0, 0, .06); }
+  .mock-bar { display: flex; gap: 5px; padding: 8px 10px; background: #f1f1f3; }
+  .mock-bar i { width: 7px; height: 7px; border-radius: 50%; background: #cfcfd4; }
+  .mock-desktop img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; }
+  .mock-phone { position: absolute; right: 6%; bottom: 7%; width: 22%; aspect-ratio: 390 / 844; border-radius: 18% / 8.5%; overflow: hidden; background: #111;
+    border: 5px solid #111; box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .55); }
+  .mock-phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 15% / 7%; }
+  @media (max-width: 767px) {
+    .mock { aspect-ratio: var(--ratio-m); }
+    .mock-phone { border-width: 3px; }
+  }
+</style>

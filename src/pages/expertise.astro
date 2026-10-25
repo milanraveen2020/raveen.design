@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Reveal from '../components/Reveal.astro';
+import PageHero from '../components/PageHero.astro';
+import MediaFrame from '../components/ds/MediaFrame.astro';
+import Tag from '../components/ds/Tag.astro';
+import SkillMarquee from '../components/ds/SkillMarquee.astro';
+import { SKILL_GROUPS, SKILL_ROWS, TITLES } from '../data/site';
+---
+<BaseLayout title={TITLES['/expertise']}>
+  <PageHero label="Expertise" title="Skills across design, development, and growth">
+    <p class="ds-body-lg muted" style="max-width:58ch">My work covers the whole life of a website: brand, UI/UX-led design, fast development with a headless CMS, e-commerce, hosting, SEO, and the campaigns that bring in leads. Behind it all are ten years of UI/UX engineering on complex digital products.</p>
+  </PageHero>
+
+  <section class="marquee" aria-hidden="true" data-marquee-section><SkillMarquee rows={SKILL_ROWS} /></section>
+
+  <Section bg="blue">
+    <div class="container groups">
+      {SKILL_GROUPS.map((g, i) => (
+        <div class:list={['group', i % 2 === 1 && 'group--flip']}>
+          <Reveal class="group-media"><MediaFrame src={g.image} alt={g.alt} ratio="5 / 4" ratioMobile="4 / 3" tone="cream" /></Reveal>
+          <Reveal delay={80} class="stack" style="gap:18px">
+            <span class="label">{g.label}</span>
+            <h2 class="ds-heading-lg" style="max-width:18ch">{g.title}</h2>
+            <p class="muted" style="max-width:56ch">{g.body}</p>
+            <div style="margin-top:8px">
+              <span class="label" style="margin-bottom:12px">{g.tagLabel}</span>
+              <div class="tags">{g.tags.map((t) => <Tag shape="chip" tone="surface">{t}</Tag>)}</div>
+            </div>
+          </Reveal>
+        </div>
+      ))}
+    </div>
+  </Section>
+</BaseLayout>
+<style>
+  .marquee { background: var(--canvas-blush); padding: 20px 0 140px; overflow: hidden; }
+  .groups { display: flex; flex-direction: column; gap: 160px; }
+  .group { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 96px; align-items: center; }
+  .group--flip :global(.group-media) { order: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  @media (max-width: 991px) {
+    .group { grid-template-columns: 1fr; gap: 32px; }
+    .group--flip :global(.group-media) { order: 0; }
+  }
+  @media (max-width: 767px) { .groups { gap: 80px; } }
+  @media (max-width: 767px), (prefers-reduced-motion: reduce) { .marquee { display: none; } }
+</style>
+<script>
+  // Rows drift in opposite directions as the section crosses the viewport:
+  // progress 0 → 12vw, .5 → -24vw, 1 → -8vw (mirrored on alternate rows).
+  const section = document.querySelector<HTMLElement>('[data-marquee-section]');
+  const tracks = Array.from(document.querySelectorAll<HTMLElement>('[data-skill-track]'));
+  const mapRow = (p: number, dir: number) => (dir * (p <= 0.5 ? 12 - 36 * (p / 0.5) : -24 + 16 * ((p - 0.5) / 0.5))).toFixed(2) + 'vw';
+  if (section && tracks.length) {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const r = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const p = Math.min(1, Math.max(0, (vh - r.top) / (r.height + vh)));
+      tracks.forEach((t) => { t.style.transform = 'translateX(' + mapRow(p, Number(t.dataset.dir)) + ')'; });
+    };
+    window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+    update();
+  }
+</script>

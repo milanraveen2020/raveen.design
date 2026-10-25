@@ -1,0 +1,14 @@
+---
+import Reveal from './Reveal.astro';
+interface Props { label?: string; title: string; class?: string }
+const { label, title, class: cls } = Astro.props;
+---
+<Reveal class:list={['section-head', cls]}>
+  {label ? <span class="label">{label}</span> : null}
+  <h2 class="ds-heading-xl">{title}</h2>
+  <slot />
+</Reveal>
+<style>
+  .section-head { display: flex; flex-direction: column; gap: 16px; }
+  h2 { margin: 0; max-width: 18ch; text-wrap: balance; }
+</style>

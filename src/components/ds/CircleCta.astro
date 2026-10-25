@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+interface Props { label?: string; href: string; ariaLabel?: string; icon?: string; tone?: 'coral' | 'ink'; class?: string }
+const { label = 'Live site', href, ariaLabel, icon = 'arrow-up-right', tone = 'coral', class: cls } = Astro.props;
+---
+<a href={href} target="_blank" rel="noreferrer" aria-label={ariaLabel || label} class:list={['circle-cta', 'circle-cta--' + tone, cls]}>
+  <span class="circle-cta-fill"></span>
+  <span class="circle-cta-inner"><span class="circle-cta-icon"><Icon name={icon} size={22} /></span><span>{label}</span></span>
+</a>
+<style>
+  .circle-cta { --size: 132px; position: relative; width: var(--size); height: var(--size); border-radius: 50%; overflow: hidden; display: inline-grid; place-items: center;
+    color: #fff; text-decoration: none; flex-shrink: 0; }
+  .circle-cta:hover { color: #fff; }
+  .circle-cta-fill { position: absolute; inset: 0; border-radius: 50%; background: var(--accent-coral); transition: transform 360ms var(--ease-out); }
+  .circle-cta--ink .circle-cta-fill { background: var(--ink-900); }
+  .circle-cta-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; font-family: var(--font-body); font-weight: 600; font-size: 14px; }
+  .circle-cta-icon { display: inline-flex; transition: transform 360ms var(--ease-out); }
+  .circle-cta:hover .circle-cta-fill, .circle-cta:focus-visible .circle-cta-fill { transform: scale(1.08); }
+  .circle-cta:hover .circle-cta-icon, .circle-cta:focus-visible .circle-cta-icon { transform: translate(4px, -4px); }
+  @media (max-width: 767px) { .circle-cta { --size: 104px; } .circle-cta-inner { font-size: 13px; } }
+</style>

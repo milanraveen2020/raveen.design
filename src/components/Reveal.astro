@@ -1,0 +1,6 @@
+---
+// Fades + lifts its content in when scrolled into view (see the observer in BaseLayout).
+interface Props { as?: string; delay?: number; class?: string; style?: string; id?: string }
+const { as: Tag = 'div', delay = 0, class: cls, style, id } = Astro.props;
+---
+<Tag id={id} class:list={['reveal', cls]} style={`--delay:${delay}ms;${style ?? ''}`}><slot /></Tag>

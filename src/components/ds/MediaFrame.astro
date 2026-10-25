@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  src?: string; alt?: string; ratio?: string; ratioMobile?: string; radius?: string; tone?: string; placeholder?: string;
+  zoomable?: boolean; zoomTitle?: string; hoverScale?: number; eager?: boolean; class?: string; style?: string;
+}
+const { src, alt = '', ratio = '4 / 3', ratioMobile, radius = 'var(--radius-lg)', tone = 'cream', placeholder = 'Image', zoomable = false, zoomTitle, hoverScale = 1.035, eager = false, class: cls, style } = Astro.props;
+const TONES: Record<string, string> = { blue: 'var(--canvas-blue)', blush: 'var(--canvas-blush)', cream: 'var(--canvas-cream)', coral: 'var(--accent-coral)', ink: 'var(--ink-900)', surface: 'var(--surface)' };
+const dark = tone === 'ink' || tone === 'coral';
+const Tag = zoomable ? 'button' : 'div';
+const vars = `--ratio:${ratio};--ratio-m:${ratioMobile ?? ratio};--radius:${radius};--tone:${TONES[tone] ?? tone};--hover-scale:${hoverScale};${style ?? ''}`;
+---
+<Tag
+  class:list={['media-frame', zoomable && 'media-frame--zoom', cls]}
+  style={vars}
+  type={zoomable ? 'button' : undefined}
+  aria-label={zoomable ? 'Enlarge image: ' + (zoomTitle || alt) : undefined}
+  data-lightbox-src={zoomable && src ? src.replace(/w=\d+/, 'w=2400') : undefined}
+  data-lightbox-alt={zoomable ? alt : undefined}
+  data-lightbox-title={zoomable ? zoomTitle : undefined}
+>
+  <div class="media-frame-inner">
+    {src
+      ? <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+      : <div class:list={['media-frame-ph', dark && 'is-dark']} role={alt ? 'img' : undefined} aria-label={alt || undefined}>{placeholder}</div>}
+  </div>
+  {zoomable ? <span aria-hidden="true" class="media-frame-zoom"><Icon name="maximize-2" size={18} /></span> : null}
+</Tag>
+<style>
+  .media-frame { position: relative; display: block; width: 100%; aspect-ratio: var(--ratio); border-radius: var(--radius); overflow: hidden; background: var(--tone); border: 0; padding: 0; }
+  .media-frame--zoom { cursor: zoom-in; }
+  .media-frame-inner { position: absolute; inset: 0; transition: transform 800ms var(--ease-out); }
+  .media-frame:hover .media-frame-inner { transform: scale(var(--hover-scale)); }
+  img { width: 100%; height: 100%; object-fit: cover; }
+  .media-frame-ph { width: 100%; height: 100%; display: grid; place-items: center; font-family: ui-monospace, Menlo, monospace; font-size: 12px; letter-spacing: 0.04em; color: var(--ink-500); }
+  .media-frame-ph.is-dark { color: rgba(255,255,255,.7); }
+  .media-frame-zoom { position: absolute; right: 16px; bottom: 16px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-float); display: grid; place-items: center; color: var(--ink-900);
+    transform: scale(.86); opacity: .85; transition: transform 600ms var(--ease-out), opacity 600ms var(--ease-out); }
+  .media-frame:hover .media-frame-zoom, .media-frame:focus-visible .media-frame-zoom { transform: scale(1); opacity: 1; }
+  @media (max-width: 767px) { .media-frame { aspect-ratio: var(--ratio-m); } }
+</style>

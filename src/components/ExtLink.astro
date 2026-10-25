@@ -1,0 +1,6 @@
+---
+import Icon from './ds/Icon.astro';
+interface Props { href: string; class?: string; style?: string }
+const { href, class: cls, style } = Astro.props;
+---
+<a href={href} target="_blank" rel="noreferrer" class:list={['site-ext', cls]} style={style}><slot /><Icon name="arrow-up-right" size={16} /></a>

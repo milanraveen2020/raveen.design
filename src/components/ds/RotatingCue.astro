@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+interface Props { text?: string; size?: number; icon?: string; href: string; class?: string; style?: string }
+const { text = 'Scroll to see my work', size = 124, icon = 'arrow-down', href, class: cls, style } = Astro.props;
+const id = 'ring-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const r = size / 2 - 16;
+const c = size / 2;
+const unit = text.toUpperCase() + ' · ';
+const ringText = unit.length > 18 ? unit : unit.repeat(2);
+const circ = 2 * Math.PI * r;
+---
+<a href={href} aria-label={text} class:list={['rotating-cue', cls]} style={`width:${size}px;height:${size}px;${style ?? ''}`}>
+  <svg aria-hidden="true" viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
+    <defs><path id={id} d={`M${c} ${c} m-${r} 0 a${r} ${r} 0 1 1 ${2 * r} 0 a${r} ${r} 0 1 1 -${2 * r} 0`} /></defs>
+    <text font-family="DM Sans, sans-serif" font-size={size * 0.092} font-weight="600" fill="currentColor">
+      <textPath href={'#' + id} textLength={circ - 2} lengthAdjust="spacing">{ringText}</textPath>
+    </text>
+  </svg>
+  <span aria-hidden="true" class="rotating-cue-core"><Icon name={icon} size={18} strokeWidth={2} /></span>
+</a>
+<style>
+  .rotating-cue { position: relative; display: inline-block; border-radius: 50%; color: var(--ink-900); text-decoration: none; }
+  .rotating-cue:hover { color: var(--ink-900); }
+  svg { position: absolute; inset: 0; animation: rotate-ring var(--rotate-duration) linear infinite; }
+  .rotating-cue:hover svg { animation-play-state: paused; }
+  .rotating-cue-core { position: absolute; inset: 50%; width: 44px; height: 44px; margin: -22px; border-radius: 50%; background: var(--ink-900); color: #fff; display: grid; place-items: center; }
+</style>

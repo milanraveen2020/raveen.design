@@ -1,0 +1,35 @@
+---
+// Brand → Design → Build → Launch → Grow, as a numbered row joined by a rule.
+import Reveal from './Reveal.astro';
+import Icon from './ds/Icon.astro';
+import { PROCESS } from '../data/site';
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+<ol class:list={['steps', cls]}>
+  {PROCESS.map((s, i) => (
+    <Reveal as="li" delay={i * 60} class="step">
+      <span class="step-top">
+        <span class="step-icon"><Icon name={s.icon} size={22} /></span>
+        <span class="label">{String(i + 1).padStart(2, '0')}</span>
+      </span>
+      <h3 class="ds-heading-md step-title">{s.title}</h3>
+      <p class="muted">{s.body}</p>
+    </Reveal>
+  ))}
+</ol>
+<style>
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+  .steps > :global(.step) { display: flex; flex-direction: column; gap: 10px; padding: 32px 24px 0 0; }
+  .steps > :global(.step + .step) { padding-left: 24px; border-left: 1px solid var(--line); }
+  .step-top { display: flex; align-items: center; justify-content: space-between; }
+  .step-icon { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-coral); color: #fff; }
+  .step-title { margin: 10px 0 0; }
+  @media (max-width: 991px) {
+    .steps { grid-template-columns: 1fr; border-top: 0; }
+    .steps > :global(.step), .steps > :global(.step + .step) { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 20px; row-gap: 4px; padding: 24px 0; border-left: 0; border-top: 1px solid var(--line); }
+    .step-top { grid-row: span 2; align-self: start; }
+    .step-top .label { display: none; }
+    .step-title { margin: 0; }
+  }
+</style>

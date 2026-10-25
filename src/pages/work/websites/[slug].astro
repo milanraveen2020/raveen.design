@@ -1,0 +1,326 @@
+---
+import type { WebsiteCase } from '../../../data/websites';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Reveal from '../../../components/Reveal.astro';
+import SiteMockup from '../../../components/SiteMockup.astro';
+import ArrowLink from '../../../components/ds/ArrowLink.astro';
+import Tag from '../../../components/ds/Tag.astro';
+import CaseMeta from '../../../components/ds/CaseMeta.astro';
+import CircleCta from '../../../components/ds/CircleCta.astro';
+import MediaFrame from '../../../components/ds/MediaFrame.astro';
+import PrevNext from '../../../components/ds/PrevNext.astro';
+import Lightbox from '../../../components/ds/Lightbox.astro';
+import { WEBSITES, desktopShot, mobileShot } from '../../../data/websites';
+
+export function getStaticPaths() {
+  return WEBSITES.map((p, i) => ({
+    params: { slug: p.slug },
+    props: { p, prev: WEBSITES[(i - 1 + WEBSITES.length) % WEBSITES.length], next: WEBSITES[(i + 1) % WEBSITES.length] },
+  }));
+}
+interface Props { p: WebsiteCase; prev: WebsiteCase; next: WebsiteCase }
+const { p, prev, next } = Astro.props;
+
+const fontsHref = p.fonts.google?.length
+  ? 'https://fonts.googleapis.com/css2?' + p.fonts.google.map((f) => 'family=' + f.replace(/ /g, '+') + ':wght@300;400;500;600;700').join('&') + '&display=swap'
+  : null;
+const fontStack = (f: string, fallback: string) => `'${f}', ${fallback}`;
+const host = p.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+const steps = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'audience', label: 'Audience' },
+  { id: 'journey', label: 'User journey' },
+  { id: 'wireframe', label: 'Wireframe' },
+  { id: 'design-system', label: 'Design system' },
+  { id: 'responsive', label: 'Responsive' },
+  { id: 'build', label: 'Build & launch' },
+];
+// Light swatches need a border and dark text on top.
+const isLight = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) > 170;
+};
+---
+<BaseLayout title={p.name + ' — Website case study — Raveen Nanayakkara'} description={p.summary}>
+  {fontsHref ? <link slot="head" rel="stylesheet" href={fontsHref} /> : null}
+
+  <section class="hero">
+    <div class="container">
+      <div class="crumbs enter" style="--delay:80ms">
+        <ArrowLink icon="arrow-left" href="/work#websites">All Websites</ArrowLink>
+        <Tag tone="surface">{p.category.split(' · ')[0]}</Tag>
+        {p.prototype ? <Tag tone="coral">Prototype</Tag> : null}
+      </div>
+      <h1 class:list={['ds-display-page', 'enter', p.name.length > 16 && 'is-long']} style="--delay:140ms;--from:translateY(5%)">{p.name}</h1>
+      <p class="ds-body-lg muted hero-sum enter" style="--delay:200ms">{p.summary}</p>
+      <div class="meta-row enter" style="--delay:260ms">
+        <CaseMeta items={p.meta} class="meta" />
+        <CircleCta class="live" label={p.prototype ? 'Prototype' : 'Live site'} ariaLabel={'Open ' + p.name + ' website'} href={p.url} />
+      </div>
+    </div>
+  </section>
+
+  <section class="cover">
+    <div class="container"><SiteMockup slug={p.slug} name={p.name} brand={p.brand} ratio="16 / 9" ratioMobile="4 / 3" eager /></div>
+  </section>
+
+  <section class="body">
+    <div class="container">
+      <nav class="steps enter" aria-label="Case study sections" style="--delay:320ms">
+        {steps.map((s, i) => <a href={'#' + s.id}><span>{String(i + 1).padStart(2, '0')}</span>{s.label}</a>)}
+      </nav>
+
+      <div class="flow">
+        <!-- Overview -->
+        <Reveal id="overview" class="chapter">
+          <span class="label chapter-label">Overview</span>
+          <div class="chapter-body">
+            <p class="ds-heading-lg lead">{p.lead}</p>
+            <h2 class="ds-heading-md sub">The challenge</h2>
+            <p>{p.challenge}</p>
+          </div>
+        </Reveal>
+
+        <!-- Audience -->
+        <Reveal id="audience" class="chapter">
+          <span class="label chapter-label">Who it’s for</span>
+          <div class="chapter-body">
+            <h2 class="ds-heading-lg">Designing for the people who use it</h2>
+            <ul class="list">{p.audience.map((a, k) => <li><span class="num">{String(k + 1).padStart(2, '0')}</span>{a}</li>)}</ul>
+          </div>
+        </Reveal>
+
+        <!-- User journey -->
+        <div id="journey" class="chapter">
+          <Reveal><span class="label chapter-label">User journey</span></Reveal>
+          <div class="chapter-body">
+            <Reveal><h2 class="ds-heading-lg">From first visit to the next step</h2></Reveal>
+            <ol class="journey" style={`--n:${p.journey.length}`}>
+              {p.journey.map((j, k) => (
+                <Reveal as="li" delay={k * 70} class="journey-step">
+                  <span class="journey-dot">{k + 1}</span>
+                  <h3>{j.title}</h3>
+                  <p>{j.body}</p>
+                </Reveal>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        <!-- Wireframe -->
+        <div id="wireframe" class="chapter">
+          <Reveal><span class="label chapter-label">Wireframe</span></Reveal>
+          <div class="chapter-body">
+            <Reveal class="stack" style="gap:16px">
+              <h2 class="ds-heading-lg">Page structure</h2>
+              <p>The homepage is planned as a sequence of sections, each answering the next question a visitor has. Below is that structure as a low-fidelity wireframe, with the site’s main navigation.</p>
+            </Reveal>
+            <Reveal class="wf">
+              <div class="wf-nav">
+                <span class="wf-logo"></span>
+                <span class="wf-links">{p.pages.map((pg) => <span>{pg}</span>)}</span>
+              </div>
+              {p.wireframe.map((w, k) => (
+                <div class:list={['wf-block', k === 0 && 'wf-block--hero']}>
+                  <span class="wf-num">{String(k + 1).padStart(2, '0')}</span>
+                  <span class="wf-name">{w}</span>
+                  <span class="wf-lines" aria-hidden="true"><i></i><i></i>{k === 0 ? <b></b> : null}</span>
+                </div>
+              ))}
+            </Reveal>
+          </div>
+        </div>
+
+        <!-- Design system -->
+        <div id="design-system" class="chapter">
+          <Reveal><span class="label chapter-label">Design system</span></Reveal>
+          <div class="chapter-body">
+            <Reveal><h2 class="ds-heading-lg">Colour, type and components</h2></Reveal>
+
+            <Reveal class="ds-block">
+              <span class="label">Colour palette</span>
+              <ul class="swatches">
+                {p.colors.map((c) => (
+                  <li class="swatch">
+                    <span class:list={['swatch-chip', isLight(c.hex) && 'is-light']} style={`background:${c.hex}`}></span>
+                    <span class="swatch-name">{c.name}</span>
+                    <span class="swatch-hex">{c.hex.toUpperCase()}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+
+            <Reveal class="ds-block">
+              <span class="label">Typography</span>
+              <div class="type">
+                <div class="type-card">
+                  <span class="type-aa" style={`font-family:${fontStack(p.fonts.display, 'var(--font-display)')}`}>Aa</span>
+                  <span class="type-meta"><b>{p.fonts.display}</b>Headings</span>
+                </div>
+                <div class="type-card">
+                  <span class="type-sample" style={`font-family:${fontStack(p.fonts.body, 'var(--font-body)')}`}>The quick brown fox jumps over the lazy dog. 0123456789</span>
+                  <span class="type-meta"><b>{p.fonts.body}</b>Body text</span>
+                </div>
+              </div>
+              {fontsHref ? null : <p class="small">{p.fonts.display === p.fonts.body ? p.fonts.display + ' is a licensed font' : 'These are licensed fonts'}, so the samples here use a stand-in.</p>}
+            </Reveal>
+
+            <Reveal class="ds-block">
+              <span class="label">Primary button</span>
+              <div class="btn-demo" style={`background:${isLight(p.button.bg) ? 'var(--ink-900)' : 'var(--surface)'}`}>
+                <span class="btn-sample" style={`background:${p.button.bg};color:${p.button.fg};border-radius:${p.button.radius};font-family:${fontStack(p.fonts.body, 'var(--font-body)')}`}>{p.button.label}</span>
+              </div>
+            </Reveal>
+
+            <Reveal class="ds-block">
+              <span class="label">Design decisions</span>
+              <ul class="list">{p.principles.map((x, k) => <li><span class="num">{String(k + 1).padStart(2, '0')}</span>{x}</li>)}</ul>
+            </Reveal>
+          </div>
+        </div>
+
+        <!-- Responsive -->
+        <div id="responsive" class="chapter">
+          <Reveal><span class="label chapter-label">Responsive</span></Reveal>
+          <div class="chapter-body">
+            <Reveal><h2 class="ds-heading-lg">Designed for every screen</h2></Reveal>
+            <Reveal class="screens">
+              <div class="screen-desktop">
+                <span class="screen-bar"><i></i><i></i><i></i><span>{host}</span></span>
+                <MediaFrame src={desktopShot(p.slug)} alt={p.name + ' homepage on desktop'} ratio="16 / 10" radius="0" tone="surface" zoomable zoomTitle={p.name + ' — desktop'} hoverScale={1} />
+              </div>
+              <div class="screen-phone">
+                <MediaFrame src={mobileShot(p.slug)} alt={p.name + ' homepage on mobile'} ratio="390 / 844" radius="0" tone="ink" zoomable zoomTitle={p.name + ' — mobile'} hoverScale={1} />
+              </div>
+            </Reveal>
+            {(p.extraImages ?? []).map((g) => (
+              <Reveal><MediaFrame src={g.src} alt={g.alt} tone="blue" ratio="16 / 9" zoomable zoomTitle={g.title} hoverScale={1.02} /></Reveal>
+            ))}
+          </div>
+        </div>
+
+        <!-- Build & launch -->
+        <Reveal id="build" class="chapter">
+          <span class="label chapter-label">Build & launch</span>
+          <div class="chapter-body">
+            <h2 class="ds-heading-lg">Development and launch</h2>
+            <ul class="list">{p.build.map((x, k) => <li><span class="num">{String(k + 1).padStart(2, '0')}</span>{x}</li>)}</ul>
+            {p.note ? <p class="small">{p.note}</p> : null}
+            <ArrowLink href={p.url}>{p.prototype ? 'View the prototype' : 'Visit ' + host}</ArrowLink>
+          </div>
+        </Reveal>
+
+        <PrevNext prev={{ title: prev.name, href: '/work/websites/' + prev.slug }} next={{ title: next.name, href: '/work/websites/' + next.slug }} />
+      </div>
+    </div>
+  </section>
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  .hero { background: var(--canvas-blue); padding: 180px 0 80px; }
+  .crumbs { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  h1 { margin: 24px 0 0; max-width: 14ch; text-wrap: balance; }
+  h1.is-long { font-size: clamp(2.5rem, 6.4vw, 5.75rem); }
+  .hero-sum { margin-top: 24px; max-width: 56ch; }
+  .meta-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-top: 56px; }
+  .meta-row :global(.meta) { flex: 1; }
+  .cover { background: linear-gradient(var(--canvas-blue) 50%, var(--canvas-cream) 50%); }
+  .body { background: var(--canvas-cream); padding: 72px 0 120px; }
+
+  /* Section index */
+  .steps { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 72px; }
+  .steps a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: var(--radius-pill); background: var(--surface); color: var(--ink-900); font-size: 14px; font-weight: 500; text-decoration: none; box-shadow: var(--shadow-card); transition: background 220ms var(--ease-out), color 220ms var(--ease-out); }
+  .steps a span { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--canvas-blush); font-size: 11px; font-weight: 600; }
+  .steps a:hover { background: var(--ink-900); color: #fff; }
+  .steps a:hover span { background: var(--accent-coral); color: #fff; }
+
+  .flow { display: flex; flex-direction: column; gap: 120px; }
+  .flow :global(.chapter) { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 48px; scroll-margin-top: 120px; }
+  .flow :global(.chapter-label) { padding-top: 12px; }
+  .chapter-body { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+  .chapter-body h2 { margin: 0; max-width: 22ch; }
+  .chapter-body p { margin: 0; max-width: 62ch; color: var(--ink-700); }
+  .chapter-body p.lead { max-width: 30ch; color: var(--ink-900); font-family: var(--font-display); text-wrap: pretty; }
+  .sub { margin-top: 16px !important; }
+  .small { font-size: 15px; color: var(--ink-500) !important; }
+
+  .list { list-style: none; margin: 0; padding: 0; max-width: 62ch; }
+  .list li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; padding: 18px 0; border-top: 1px solid var(--line); color: var(--ink-900); }
+  .list li:last-child { border-bottom: 1px solid var(--line); }
+  .num { font-size: 12px; font-weight: 600; color: var(--accent-coral); padding-top: 4px; }
+
+  /* Journey: numbered steps joined by a line */
+  .journey { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 16px; position: relative; }
+  .journey::before { content: ''; position: absolute; left: 22px; right: 22px; top: 22px; height: 2px; background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 12px); }
+  .journey > :global(.journey-step) { position: relative; display: flex; flex-direction: column; gap: 10px; }
+  .journey-dot { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--ink-900); color: #fff; font-weight: 600; box-shadow: 0 0 0 6px var(--canvas-cream); }
+  .journey > :global(.journey-step:last-child) .journey-dot { background: var(--accent-coral); }
+  .journey h3 { margin: 8px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 20px; line-height: 1.2; color: var(--ink-900); }
+  .journey p { font-size: 15px; }
+
+  /* Low-fidelity wireframe */
+  .chapter-body :global(.wf) { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .wf-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 14px; border: 1.5px dashed var(--line-strong); border-radius: 10px; }
+  .wf-logo { width: 64px; height: 14px; border-radius: 4px; background: var(--line-strong); flex-shrink: 0; }
+  .wf-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px 14px; font-size: 12px; color: var(--ink-500); }
+  .wf-block { display: grid; grid-template-columns: 32px minmax(0, 1fr) 30%; align-items: center; gap: 12px; padding: 16px 14px; border: 1.5px dashed var(--line); border-radius: 10px; background: repeating-linear-gradient(135deg, transparent 0 10px, rgba(23, 25, 43, .025) 10px 20px); }
+  .wf-block--hero { padding: 40px 14px; border-color: var(--line-strong); }
+  .wf-num { font-size: 11px; font-weight: 600; color: var(--ink-500); }
+  .wf-name { font-size: 15px; font-weight: 500; color: var(--ink-900); }
+  .wf-block--hero .wf-name { font-family: var(--font-display); font-size: 20px; }
+  .wf-lines { display: flex; flex-direction: column; gap: 6px; }
+  .wf-lines i { height: 6px; border-radius: 3px; background: var(--line); }
+  .wf-lines i + i { width: 70%; }
+  .wf-lines b { margin-top: 6px; width: 46%; height: 18px; border-radius: 9px; background: var(--accent-coral); opacity: .75; }
+
+  /* Design system */
+  .chapter-body :global(.ds-block) { display: flex; flex-direction: column; gap: 14px; }
+  .swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  .swatch { display: flex; flex-direction: column; gap: 4px; padding: 8px 8px 12px; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  .swatch-chip { height: 72px; border-radius: 10px; margin-bottom: 6px; }
+  .swatch-chip.is-light { box-shadow: inset 0 0 0 1px var(--line); }
+  .swatch-name { font-size: 14px; font-weight: 600; color: var(--ink-900); padding: 0 4px; }
+  .swatch-hex { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--ink-500); padding: 0 4px; }
+  .type { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 12px; }
+  .type-card { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; padding: 24px; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); min-height: 180px; }
+  .type-aa { font-size: 88px; line-height: 1; color: var(--ink-900); }
+  .type-sample { font-size: 22px; line-height: 1.45; color: var(--ink-900); }
+  .type-meta { display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--ink-500); }
+  .type-meta b { font-size: 15px; color: var(--ink-900); }
+  .btn-demo { display: flex; align-items: center; justify-content: center; padding: 40px 24px; border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  .btn-sample { display: inline-flex; align-items: center; padding: 14px 26px; font-size: 15px; font-weight: 600; }
+
+  /* Responsive screenshots */
+  .chapter-body :global(.screens) { display: grid; grid-template-columns: minmax(0, 1fr) 24%; gap: 24px; align-items: end; }
+  .screen-desktop { border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow-card); }
+  .screen-bar { display: flex; align-items: center; gap: 6px; padding: 10px 12px; background: #f1f1f3; font-size: 12px; color: var(--ink-500); }
+  .screen-bar i { width: 9px; height: 9px; border-radius: 50%; background: #cfcfd4; }
+  .screen-bar span { margin-left: 10px; }
+  .screen-phone { border: 6px solid #111; border-radius: 30px; overflow: hidden; background: #111; box-shadow: var(--shadow-card); }
+
+  @media (max-width: 991px) {
+    .meta-row { flex-wrap: wrap; }
+    .meta-row :global(.live) { margin-right: 64px; }
+    .flow :global(.chapter) { grid-template-columns: 1fr; gap: 16px; }
+    .journey { grid-template-columns: 1fr; gap: 0; }
+    .journey::before { left: 21px; right: auto; top: 22px; bottom: 22px; width: 2px; height: auto; background: repeating-linear-gradient(180deg, var(--line-strong) 0 6px, transparent 6px 12px); }
+    .journey > :global(.journey-step) { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 18px; padding-bottom: 24px; }
+    .journey-dot { grid-row: span 2; }
+    .journey h3 { margin: 10px 0 0; }
+  }
+  @media (max-width: 767px) {
+    .hero { padding: 128px 0 48px; }
+    .meta-row { margin-top: 32px; }
+    .body { padding: 48px 0 80px; }
+    .steps { padding-bottom: 48px; }
+    .flow { gap: 72px; }
+    .wf-block { grid-template-columns: 28px minmax(0, 1fr); }
+    .wf-lines { display: none; }
+    .wf-links { display: none; }
+    .type { grid-template-columns: 1fr; }
+    .type-aa { font-size: 64px; }
+    .chapter-body :global(.screens) { grid-template-columns: minmax(0, 1fr) 34%; gap: 12px; }
+    .screen-phone { border-width: 4px; border-radius: 18px; }
+  }
+</style>

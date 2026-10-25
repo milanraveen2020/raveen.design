@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ds/Button.astro';
+import FormStatus from '../components/ds/FormStatus.astro';
+import Icon from '../components/ds/Icon.astro';
+import Tag from '../components/ds/Tag.astro';
+import TextField from '../components/ds/TextField.astro';
+import { INQUIRY, PROFILE, TITLES } from '../data/site';
+
+const links = [
+  { label: 'LinkedIn', icon: 'linkedin', href: PROFILE.linkedin },
+  { label: 'Behance', icon: 'palette', href: PROFILE.behance },
+  { label: 'Fiverr — design-to-frontend', icon: 'briefcase-business', href: PROFILE.fiverrBootstrap },
+  { label: 'Fiverr — Next.js websites', icon: 'briefcase-business', href: PROFILE.fiverrNext },
+];
+const year = new Date().getFullYear();
+---
+<BaseLayout title={TITLES['/contact']} footer="none">
+  <section id="contact" class="contact">
+    <div class="container">
+      <h1 class="ds-display-hero enter" style="--delay:140ms;--from:translateY(5%)">Let’s work together.</h1>
+      <p class="ds-body-lg muted contact-intro enter" style="--delay:300ms">Need a new website, an online store, or a brand to go with them? Tell me a little about your business and what you want to achieve, and I’ll take it from there.</p>
+
+      <div class="contact-grid enter" style="--delay:420ms">
+        <div>
+          <FormStatus status="success" title="Thanks for reaching out." hidden data-form-sent>Your message has been submitted. I’ll get back to you when I can.</FormStatus>
+          <!--
+            The form validates in the browser and then simulates a send, like the original prototype.
+            To receive messages, set `action` to a form endpoint (Formspree, Netlify Forms, your own API)
+            and set data-endpoint="real" so the script POSTs the data there.
+          -->
+          <form novalidate class="contact-form" data-contact-form action="" method="post">
+            <FormStatus status="error" class="span-2 form-error" hidden data-form-error>Your message couldn’t be sent. Please try again or contact me by email.</FormStatus>
+            <TextField label="Name" name="name" required />
+            <TextField label="Email" name="email" type="email" required />
+            <fieldset class="span-2 types" data-field="type">
+              <legend>Project Type<span data-err-text></span></legend>
+              <input type="hidden" name="type" value="" />
+              <div role="radiogroup" aria-label="Project Type" class="chips">
+                {INQUIRY.map((t) => (
+                  <button type="button" role="radio" aria-checked="false" data-value={t} class="chip">
+                    <Tag shape="chip" tone="surface" class="chip-tag">{t}</Tag>
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+            <TextField label="Project Summary" name="summary" multiline required class="span-2" />
+            <TextField label="Website or Reference URL (optional)" name="url" type="url" class="span-2" />
+            <div class="span-2" style="margin-top:8px"><Button type="submit" icon="send" class="submit" data-submit>Send message</Button></div>
+          </form>
+        </div>
+
+        <aside class="contact-aside">
+          <div><span class="label">Email</span><a href={'mailto:' + PROFILE.email} class="contact-email">{PROFILE.email}</a></div>
+          <div><span class="label">Elsewhere</span>
+            <div class="contact-links">
+              {links.map((s) => <a href={s.href} target="_blank" rel="noreferrer" class="site-ext contact-link"><Icon name={s.icon} size={20} />{s.label}</a>)}
+            </div>
+          </div>
+          <div><span class="label">I can help with</span><p class="muted" style="margin-top:10px">{INQUIRY.join(' · ')}</p></div>
+        </aside>
+      </div>
+
+      <div class="contact-legal"><span>© {year} Raveen Nanayakkara. All rights reserved.</span><span>Thoughtful design. Practical development.</span></div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact { background: var(--canvas-blush); min-height: 100vh; padding: 190px 0 64px; }
+  h1 { margin: 0; max-width: 9ch; }
+  .contact-intro { margin-top: 28px; max-width: 52ch; }
+  .contact-grid { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); gap: 96px; margin-top: 96px; align-items: start; }
+  .contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
+  .contact-form[hidden] { display: none; }
+  .contact-form :global(.span-2) { grid-column: 1 / -1; }
+  .contact-form :global(.form-error) { margin-bottom: 16px; }
+  .types { border: 0; margin: 12px 0 20px; padding: 0; }
+  legend { padding: 0; margin-bottom: 14px; font-size: 14px; font-weight: 500; color: var(--ink-700); }
+  .types.has-error legend { color: var(--danger); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 0; padding: 0; background: none; cursor: pointer; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center; }
+  .chip[aria-checked="true"] :global(.chip-tag) { --bg: var(--accent-coral); --fg: #fff; }
+  .contact-aside { display: flex; flex-direction: column; gap: 40px; }
+  .contact-email { display: inline-block; margin-top: 10px; font-family: var(--font-display); font-size: 24px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink-900); text-decoration: none; word-break: break-all; }
+  .contact-email:hover { color: var(--accent-coral-dark); }
+  .contact-links { display: flex; flex-direction: column; gap: 2px; margin-top: 10px; }
+  .contact-link { gap: 12px; font-size: 17px; }
+  .contact-legal { margin-top: 160px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--ink-500); }
+  @media (max-width: 991px) { .contact-grid { grid-template-columns: 1fr; gap: 64px; } }
+  @media (max-width: 767px) {
+    .contact { padding: 128px 0 48px; }
+    .contact-grid { margin-top: 56px; }
+    .contact-form { grid-template-columns: 1fr; }
+    .contact-form :global(.submit) { display: flex; width: 100%; }
+    .contact-legal { margin-top: 96px; }
+  }
+  @media (max-width: 479px) { .contact-email { font-size: 20px; } }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const sent = document.querySelector<HTMLElement>('[data-form-sent]');
+  const failed = document.querySelector<HTMLElement>('[data-form-error]');
+  const submit = form?.querySelector<HTMLButtonElement>('[data-submit]');
+  const typeInput = form?.querySelector<HTMLInputElement>('input[name="type"]');
+  const chips = Array.from(form?.querySelectorAll<HTMLButtonElement>('[role="radio"]') ?? []);
+
+  const setError = (name: string, msg?: string) => {
+    const field = form?.querySelector<HTMLElement>(`[data-field="${name}"]`);
+    if (!field) return;
+    field.classList.toggle('has-error', !!msg);
+    const text = field.querySelector<HTMLElement>('[data-err-text]');
+    const input = field.querySelector<HTMLElement>('input:not([type="hidden"]), textarea');
+    if (name === 'type') { if (text) text.textContent = msg ? ' — ' + msg : ''; return; }
+    const err = field.querySelector<HTMLElement>('.field-err');
+    if (err) err.hidden = !msg;
+    if (text) text.textContent = msg ?? '';
+    if (input) {
+      if (msg) { input.setAttribute('aria-invalid', 'true'); input.setAttribute('aria-describedby', err?.id ?? ''); }
+      else { input.removeAttribute('aria-invalid'); input.removeAttribute('aria-describedby'); }
+    }
+  };
+
+  chips.forEach((chip) => chip.addEventListener('click', () => {
+    chips.forEach((c) => c.setAttribute('aria-checked', String(c === chip)));
+    if (typeInput) typeInput.value = chip.dataset.value ?? '';
+    setError('type');
+  }));
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const v = (k: string) => String(data.get(k) ?? '').trim();
+    const errors: Record<string, string> = {};
+    if (!v('name')) errors.name = 'Please enter your name';
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email'))) errors.email = 'Please enter a valid email address';
+    if (!v('type')) errors.type = 'Please choose a project type';
+    if (v('summary').length < 10) errors.summary = 'Please add a short project summary';
+    ['name', 'email', 'type', 'summary'].forEach((k) => setError(k, errors[k]));
+    if (failed) failed.hidden = Object.keys(errors).length === 0;
+    if (Object.keys(errors).length) return;
+
+    if (submit) { submit.disabled = true; submit.setAttribute('aria-busy', 'true'); submit.querySelector('.btn-label')!.textContent = 'Sending…'; }
+    try {
+      if (form.dataset.endpoint === 'real' && form.action) {
+        const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+      } else {
+        await new Promise((r) => setTimeout(r, 1100));
+      }
+      form.hidden = true;
+      if (sent) { sent.hidden = false; sent.focus(); }
+    } catch {
+      if (failed) failed.hidden = false;
+      if (submit) { submit.disabled = false; submit.removeAttribute('aria-busy'); submit.querySelector('.btn-label')!.textContent = 'Send message'; }
+    }
+  });
+</script>

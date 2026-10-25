@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+interface Props { href?: string; icon?: string; size?: 'md' | 'lg'; class?: string; [key: string]: any }
+const { href, icon = 'arrow-up-right', size = 'md', class: cls, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+<Tag href={href} type={href ? undefined : 'button'} class:list={['arrow-link', 'arrow-link--' + size, cls]} {...rest}>
+  <span><slot /></span>
+  <span class="arrow-link-circle"><span class="arrow-link-arrow"><Icon name={icon} size={size === 'lg' ? 16 : 14} strokeWidth={2} /></span></span>
+</Tag>
+<style>
+  .arrow-link { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; background: none; border: none; padding: 0; cursor: pointer;
+    font-family: var(--font-body); font-size: 16px; font-weight: 500; color: var(--ink-900); text-decoration: none; }
+  .arrow-link--lg { font-size: 18px; }
+  .arrow-link-circle { width: 26px; height: 26px; border-radius: 50%; display: inline-grid; place-items: center; color: #fff; background: var(--ink-900); transition: background 300ms var(--ease-out); }
+  .arrow-link--lg .arrow-link-circle { width: 32px; height: 32px; }
+  .arrow-link-arrow { display: inline-flex; transition: transform 300ms var(--ease-out); }
+  .arrow-link:hover, .arrow-link:focus-visible { color: var(--ink-900); }
+  .arrow-link:hover .arrow-link-circle, .arrow-link:focus-visible .arrow-link-circle { background: var(--accent-coral); }
+  .arrow-link:hover .arrow-link-arrow, .arrow-link:focus-visible .arrow-link-arrow { transform: translate(2px, -2px); }
+</style>

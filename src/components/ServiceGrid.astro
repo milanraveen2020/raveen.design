@@ -1,0 +1,38 @@
+---
+// Service cards in a three-column grid; the first (lead) and last services take wide slots so seven cards close as 2+1 / 3 / 1+2.
+import Reveal from './Reveal.astro';
+import Icon from './ds/Icon.astro';
+import { SERVICES } from '../data/site';
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+<ul class:list={['services', cls]}>
+  {SERVICES.map((x, i) => (
+    <Reveal as="li" delay={(i % 3) * 60} class:list={['card', 'service', i === 0 && 'service--lead']}>
+      <span class="service-icon"><Icon name={x.icon} size={24} /></span>
+      <h3 class="ds-heading-md service-title">{x.title}</h3>
+      <p class="service-body">{x.body}</p>
+    </Reveal>
+  ))}
+</ul>
+<style>
+  .services { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .services > :global(.service) { padding: 40px 36px; }
+  .services > :global(.service--lead) { grid-column: span 2; background: var(--ink-900); color: #fff; }
+  .services > :global(.service:last-child) { grid-column: span 2; }
+  .service-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--canvas-blush); display: grid; place-items: center; color: var(--ink-900); }
+  .services > :global(.service--lead) .service-icon { background: var(--accent-coral); color: #fff; }
+  .service-title { margin: 8px 0 0; font-size: clamp(1.25rem, 1.7vw, 1.6rem); }
+  .services > :global(.service--lead) .service-title { color: #fff; font-size: clamp(1.5rem, 2.4vw, 2.25rem); max-width: 18ch; }
+  .service-body { color: var(--ink-700); max-width: 52ch; }
+  .services > :global(.service--lead) .service-body { color: rgba(255, 255, 255, .78); font-size: var(--size-body-lg); }
+  @media (max-width: 991px) {
+    .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .services > :global(.service--lead) { grid-column: 1 / -1; }
+    .services > :global(.service:last-child) { grid-column: auto; }
+  }
+  @media (max-width: 767px) {
+    .services { grid-template-columns: 1fr; }
+    .services > :global(.service) { padding: 32px 28px; }
+  }
+</style>

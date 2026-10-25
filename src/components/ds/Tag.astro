@@ -1,0 +1,17 @@
+---
+interface Props { tone?: 'surface' | 'blush' | 'blue' | 'outline' | 'coral'; shape?: 'tag' | 'chip'; class?: string }
+const { tone = 'outline', shape = 'tag', class: cls } = Astro.props;
+---
+<span class:list={['tag', 'tag--' + shape, 'tag--' + tone, cls]}><slot /></span>
+<style>
+  .tag { --bg: transparent; --fg: var(--ink-700); --bd: var(--line);
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--fg); border: 1px solid var(--bd); font-family: var(--font-body);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.25; white-space: nowrap;
+    transition: background 220ms var(--ease-out), color 220ms var(--ease-out); }
+  .tag--chip { padding: 8px 16px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+  .tag--surface { --bg: var(--surface); --fg: var(--ink-900); --bd: transparent; }
+  .tag--blush { --bg: var(--canvas-blush); --fg: var(--ink-900); --bd: transparent; }
+  .tag--blue { --bg: var(--canvas-blue); --fg: var(--ink-900); --bd: transparent; }
+  .tag--coral { --bg: var(--accent-coral); --fg: #fff; --bd: transparent; }
+</style>

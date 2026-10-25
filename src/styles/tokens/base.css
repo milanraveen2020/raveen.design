@@ -1,0 +1,19 @@
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font-body);font-size:var(--size-body-md);line-height:var(--lh-body);font-weight:var(--weight-regular);color:var(--text-body);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:var(--weight-medium);color:var(--text-heading);margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:var(--text-heading);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--accent-coral)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+img{display:block;max-width:100%}
+.ds-display-hero{font-family:var(--font-display);font-weight:500;font-size:var(--size-display-hero);line-height:var(--lh-display);letter-spacing:var(--tracking-display);color:var(--text-heading)}
+.ds-display-page{font-family:var(--font-display);font-weight:500;font-size:var(--size-display-page);line-height:var(--lh-display-page);letter-spacing:var(--tracking-display);color:var(--text-heading)}
+.ds-heading-xl{font-family:var(--font-display);font-weight:500;font-size:var(--size-heading-xl);line-height:var(--lh-heading-xl);letter-spacing:var(--tracking-heading);color:var(--text-heading)}
+.ds-heading-lg{font-family:var(--font-display);font-weight:500;font-size:var(--size-heading-lg);line-height:var(--lh-heading-lg);letter-spacing:var(--tracking-heading);color:var(--text-heading)}
+.ds-heading-md{font-family:var(--font-display);font-weight:500;font-size:var(--size-heading-md);line-height:var(--lh-heading-md);letter-spacing:var(--tracking-heading-md);color:var(--text-heading)}
+.ds-body-lg{font-size:var(--size-body-lg);line-height:var(--lh-body-lg)}
+.ds-label{font-family:var(--font-body);font-size:var(--size-label);line-height:var(--lh-label);font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--text-muted)}
+.ds-container{width:min(calc(100% - 48px),var(--container));margin-inline:auto}
+.ds-container--narrow{width:min(calc(100% - 48px),var(--container-narrow));margin-inline:auto}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}[data-scroll-word],[data-skill-track],[data-parallax],[data-progress-dot]{transform:none!important}[data-process-card]{position:relative!important;top:auto!important;transform:none!important}}

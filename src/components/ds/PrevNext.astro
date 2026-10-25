@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+interface Item { title: string; href: string }
+interface Props { prev?: Item; next?: Item }
+const { prev, next } = Astro.props;
+---
+<nav aria-label="More projects" class="prev-next">
+  {prev ? (
+    <a href={prev.href} class="pn pn--prev">
+      <span class="pn-label"><span class="pn-arrow"><Icon name="arrow-left" size={16} /></span>Previous project</span>
+      <span class="pn-title">{prev.title}</span>
+    </a>
+  ) : <span />}
+  {next ? (
+    <a href={next.href} class="pn pn--next">
+      <span class="pn-label">Next project<span class="pn-arrow"><Icon name="arrow-right" size={16} /></span></span>
+      <span class="pn-title">{next.title}</span>
+    </a>
+  ) : <span />}
+</nav>
+<style>
+  .prev-next { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 24px; padding: 48px 0; border-top: 1px solid var(--line); }
+  .pn { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; text-align: left; text-decoration: none; color: var(--ink-900); }
+  .pn--next { align-items: flex-end; text-align: right; }
+  .pn-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); }
+  .pn-arrow { display: inline-flex; transition: transform 300ms var(--ease-out); }
+  .pn--prev:hover .pn-arrow { transform: translateX(-4px); }
+  .pn--next:hover .pn-arrow { transform: translateX(4px); }
+  .pn-title { font-family: var(--font-display); font-weight: 500; font-size: var(--size-heading-lg); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-900); transition: color 300ms var(--ease-out); }
+  .pn:hover .pn-title { color: var(--accent-coral); }
+</style>

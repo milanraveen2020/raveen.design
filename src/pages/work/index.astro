@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Reveal from '../../components/Reveal.astro';
+import PageHero from '../../components/PageHero.astro';
+import SiteMockup from '../../components/SiteMockup.astro';
+import ArrowLink from '../../components/ds/ArrowLink.astro';
+import ProjectCard from '../../components/ds/ProjectCard.astro';
+import { TITLES } from '../../data/site';
+import { WEBSITES } from '../../data/websites';
+---
+<BaseLayout title={TITLES['/work']}>
+  <PageHero label="Work" title="Websites and digital products" bg="cream">
+    <p class="ds-body-lg muted" style="max-width:56ch">Websites I’ve designed and built for businesses, each with a case study covering the user journey, wireframes, design system, and build.</p>
+  </PageHero>
+
+  <!-- Websites: the main line of work -->
+  <Section bg="cream" id="websites" top={20} topMobile={8} bottom={140}>
+    <div class="container">
+      <div class="head">
+        <SectionHead label="Web design & development" title="Websites">
+          <p class="ds-body-lg muted" style="max-width:52ch">Live business websites, designed with UI/UX principles and built to be fast, responsive, and easy to manage.</p>
+        </SectionHead>
+        <Reveal delay={80}><ArrowLink href="/expertise">My Expertise</ArrowLink></Reveal>
+      </div>
+      <div class="work-list sites">
+        {WEBSITES.map((w, i) => (
+          <Reveal>
+            <ProjectCard title={w.name} category={w.category} summary={w.summary} tone={w.tone} reverse={i % 2 === 1} cta="View Case Study" href={'/work/websites/' + w.slug}>
+              <SiteMockup slot="media" slug={w.slug} name={w.name} brand={w.brand} radius="var(--pc-radius)" />
+            </ProjectCard>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </Section>
+
+</BaseLayout>
+<style>
+  .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .head + .sites { margin-top: 96px; }
+  .work-list { display: flex; flex-direction: column; gap: 180px; margin-top: 96px; }
+  @media (max-width: 767px) {
+    .head + .sites { margin-top: 48px; }
+    .work-list { gap: 64px; margin-top: 48px; }
+  }
+</style>

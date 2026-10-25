@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSplit from '../components/HeroSplit.astro';
+import HeroBridge from '../components/HeroBridge.astro';
+import WebDesignHighlight from '../components/WebDesignHighlight.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import Reviews from '../components/Reviews.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Reveal from '../components/Reveal.astro';
+import ArrowLink from '../components/ds/ArrowLink.astro';
+import SiteMockup from '../components/SiteMockup.astro';
+import ProjectCard from '../components/ds/ProjectCard.astro';
+import { TITLES } from '../data/site';
+import { WEBSITES } from '../data/websites';
+---
+<BaseLayout title={TITLES['/']} footer="home">
+  <HeroSplit />
+
+  <HeroBridge />
+
+  <!-- Services -->
+  <Section bg="blush" id="services" top={40} topMobile={24}>
+    <div class="container">
+      <div class="services-head">
+        <SectionHead label="What I do" title="Everything your website needs, in one place" />
+        <Reveal delay={80}><ArrowLink href="/expertise">My Expertise</ArrowLink></Reveal>
+      </div>
+      <ServiceGrid class="services-grid" />
+    </div>
+  </Section>
+
+  <!-- Web design & development: process, live sites, tools -->
+  <WebDesignHighlight />
+
+  <!-- Client reviews -->
+  <Reviews />
+
+  <!-- Featured websites -->
+  <Section bg="blue" id="featured-work" bottom={140}>
+    <div class="container">
+      <SectionHead label="Featured work" title="Websites I’ve designed and built">
+        <p class="ds-body-lg muted" style="max-width:56ch">A few recent projects, each with a case study covering the user journey, wireframes, design system, and build.</p>
+      </SectionHead>
+      <div class="work-list">
+        {WEBSITES.filter((w) => w.featured).map((w, i) => (
+          <Reveal>
+            <ProjectCard title={w.name} category={w.category} summary={w.summary} tone={w.tone} reverse={i % 2 === 1} cta="View Case Study" href={'/work/websites/' + w.slug}>
+              <SiteMockup slot="media" slug={w.slug} name={w.name} brand={w.brand} radius="var(--pc-radius)" />
+            </ProjectCard>
+          </Reveal>
+        ))}
+      </div>
+      <div class="work-more"><ArrowLink size="lg" href="/work">Explore All Work</ArrowLink></div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .services-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .services-head + :global(.services-grid) { margin-top: 72px; }
+  .work-list { display: flex; flex-direction: column; gap: 180px; margin-top: 110px; }
+  .work-more { margin-top: 130px; display: flex; justify-content: center; }
+
+  @media (max-width: 767px) {
+    .services-head + :global(.services-grid) { margin-top: 40px; }
+    .work-list { gap: 64px; margin-top: 48px; }
+    .work-more { margin-top: 64px; }
+  }
+</style>

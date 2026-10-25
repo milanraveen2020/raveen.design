@@ -1,0 +1,49 @@
+---
+// Continues the split-face hero: its centre seam runs down through this section,
+// with a centred statement and the main calls to action sitting on the line.
+import Reveal from './Reveal.astro';
+import Button from './ds/Button.astro';
+import RotatingCue from './ds/RotatingCue.astro';
+---
+<section class="bridge" aria-labelledby="bridge-title">
+  <span class="bridge-seam" aria-hidden="true"></span>
+
+  <div class="container bridge-inner">
+    <Reveal class="bridge-head">
+      <span class="label">Web design & development</span>
+      <h2 id="bridge-title" class="ds-heading-xl bridge-title">I design and build websites <span class="accent">that work for your business.</span></h2>
+      <p class="ds-body-lg muted bridge-lead">Fast, modern websites built on ten years of UI/UX engineering. From your logo and brand to headless CMS development, e-commerce, hosting, SEO, and social media campaigns, I handle it all so you don’t need to worry about anything.</p>
+    </Reveal>
+
+    <Reveal class="bridge-actions">
+      <Button href="/work">Explore My Work</Button>
+      <Button variant="surface" icon="mail" href="/contact">Get in Touch</Button>
+    </Reveal>
+
+    <div class="bridge-cue"><RotatingCue text="Scroll to see what I do" href="#services" size={112} /></div>
+  </div>
+</section>
+
+<style>
+  .bridge { position: relative; background: var(--canvas-blush); padding: 120px 0 72px; overflow: hidden; }
+  /* The hero's seam, continued: fades in from the face edge and runs to the scroll cue */
+  .bridge-seam { position: absolute; left: 50%; top: 0; bottom: 72px; width: 1px; background: linear-gradient(var(--line-strong), var(--line) 30%, var(--line) 85%, transparent); }
+  .bridge-inner { position: relative; display: flex; flex-direction: column; align-items: center; }
+
+  /* Centred statement on the line (blush backing hides the seam behind the text) */
+  .bridge-inner :global(.bridge-head) { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; background: var(--canvas-blush); padding: 24px 8px; }
+  .bridge-title { margin: 0; max-width: 20ch; text-wrap: balance; }
+  .accent { color: var(--accent-coral); }
+  .bridge-lead { max-width: 56ch; }
+
+  .bridge-inner :global(.bridge-actions) { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 64px; background: var(--canvas-blush); padding: 12px; }
+  .bridge-cue { margin-top: 72px; }
+
+  /* Phones: drop the seam and cue */
+  @media (max-width: 767px) {
+    .bridge { padding: 72px 0 80px; }
+    .bridge-seam, .bridge-cue { display: none; }
+    .bridge-inner :global(.bridge-head) { padding: 0; }
+    .bridge-inner :global(.bridge-actions) { margin-top: 40px; padding: 0; }
+  }
+</style>

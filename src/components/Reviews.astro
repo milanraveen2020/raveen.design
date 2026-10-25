@@ -1,0 +1,94 @@
+---
+// Fiverr rating + client reviews: one featured quote on ink, the rest as cards.
+import Section from './Section.astro';
+import SectionHead from './SectionHead.astro';
+import Reveal from './Reveal.astro';
+import ExtLink from './ExtLink.astro';
+import Icon from './ds/Icon.astro';
+import { FIVERR_RATING, PROFILE, REVIEWS } from '../data/site';
+const [featured, ...rest] = REVIEWS;
+const stars = Array.from({ length: 5 });
+---
+<Section bg="blush" id="reviews" top={140} bottom={160}>
+  <div class="container">
+    <div class="rv-head">
+      <SectionHead label="Client reviews" title="What clients say about working with me" />
+      <Reveal delay={80} class="rv-score">
+        <span class="rv-score-num">{FIVERR_RATING.score}</span>
+        <span class="stack" style="gap:6px">
+          <span class="rv-stars rv-stars--lg" aria-label={`${FIVERR_RATING.score} out of 5 stars`}>{stars.map(() => <Icon name="star" size={22} />)}</span>
+          <span class="muted">from {FIVERR_RATING.count} reviews on Fiverr</span>
+          <ExtLink href={PROFILE.fiverr}>Read all reviews</ExtLink>
+        </span>
+      </Reveal>
+    </div>
+
+    <Reveal as="figure" class="rv-featured">
+      <span class="rv-mark" aria-hidden="true">“</span>
+      <blockquote class="rv-featured-quote">{featured.quote}</blockquote>
+      <figcaption class="rv-by rv-by--light">
+        <span class="rv-avatar">{featured.name[0].toUpperCase()}</span>
+        <span class="stack" style="gap:2px">
+          <span class="rv-name">{featured.name}</span>
+          <span class="rv-meta">{featured.country} · {featured.service}</span>
+        </span>
+        <span class="rv-stars" aria-label="5 out of 5 stars">{stars.map(() => <Icon name="star" size={16} />)}</span>
+      </figcaption>
+    </Reveal>
+
+    <ul class="rv-list">
+      {rest.map((r, i) => (
+        <Reveal as="li" delay={i * 80} class="card rv-card">
+          <span class="rv-stars" aria-label="5 out of 5 stars">{stars.map(() => <Icon name="star" size={16} />)}</span>
+          <blockquote class="rv-quote">“{r.quote}”</blockquote>
+          <div class="rv-by">
+            <span class="rv-avatar">{r.name[0].toUpperCase()}</span>
+            <span class="stack" style="gap:2px">
+              <span class="rv-name">{r.name}</span>
+              <span class="rv-meta">{r.country} · {r.service}</span>
+            </span>
+            {r.repeat ? <span class="rv-badge">Repeat client</span> : null}
+          </div>
+        </Reveal>
+      ))}
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .rv-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
+  .rv-head :global(.rv-score) { display: flex; align-items: center; gap: 20px; }
+  .rv-score-num { font-family: var(--font-display); font-weight: 500; font-size: clamp(4rem, 7vw, 6rem); line-height: 1; letter-spacing: -0.04em; color: var(--ink-900); }
+
+  .rv-stars { display: inline-flex; gap: 2px; color: var(--accent-coral); }
+  .rv-stars :global(svg) { fill: currentColor; }
+
+  .container > :global(.rv-featured) { position: relative; margin: 72px 0 0; padding: 64px 64px 48px; border-radius: var(--radius-xl); background: var(--ink-900); color: #fff; overflow: hidden; }
+  .rv-mark { position: absolute; top: -28px; right: 40px; font-family: var(--font-display); font-size: 260px; line-height: 1; color: var(--accent-coral); opacity: .9; }
+  .rv-featured-quote { position: relative; margin: 0; max-width: 34ch; font-family: var(--font-display); font-weight: 500; font-size: clamp(1.4rem, 2.4vw, 2.1rem); line-height: 1.3; letter-spacing: -0.015em; text-wrap: pretty; }
+
+  .rv-list { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .rv-list > :global(.rv-card) { padding: 36px 32px; gap: 20px; }
+  .rv-quote { margin: 0; color: var(--ink-700); flex: 1; }
+
+  .rv-by { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .rv-by--light { margin-top: 40px; }
+  .rv-avatar { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: var(--canvas-blush); color: var(--ink-900); font-weight: 600; }
+  .rv-by--light .rv-avatar { background: var(--accent-coral); color: #fff; }
+  .rv-name { font-weight: 600; color: var(--ink-900); }
+  .rv-meta { font-size: 14px; color: var(--ink-500); }
+  .rv-by--light .rv-name { color: #fff; }
+  .rv-by--light .rv-meta { color: rgba(255, 255, 255, .65); }
+  .rv-by--light .rv-stars { margin-left: auto; }
+  .rv-badge { margin-left: auto; padding: 4px 10px; border-radius: var(--radius-pill); background: var(--canvas-blue); font-size: 12px; font-weight: 600; color: var(--ink-900); }
+
+  @media (max-width: 991px) {
+    .rv-list { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 767px) {
+    .container > :global(.rv-featured) { margin-top: 40px; padding: 88px 28px 32px; }
+    .rv-mark { font-size: 180px; right: 20px; top: -20px; }
+    .rv-list > :global(.rv-card) { padding: 28px 24px; }
+    .rv-by--light .rv-stars { margin-left: 0; }
+  }
+</style>

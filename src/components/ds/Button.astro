@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+interface Props { variant?: 'primary' | 'dark' | 'surface'; size?: 'sm' | 'md'; icon?: string | null; fullWidth?: boolean; disabled?: boolean; type?: 'button' | 'submit'; href?: string; class?: string; [key: string]: any }
+const { variant = 'primary', size = 'md', icon = 'arrow-right', fullWidth = false, disabled = false, type = 'button', href, class: cls, ...rest } = Astro.props;
+const classes = ['btn', 'btn--' + variant, 'btn--' + size, fullWidth && 'btn--full', cls];
+---
+{href && !disabled ? (
+  <a href={href} class:list={classes} {...rest}><span class="btn-label"><slot /></span>{icon ? <span class="btn-icon"><Icon name={icon} size={18} /></span> : null}</a>
+) : (
+  <button type={type} disabled={disabled} class:list={classes} {...rest}><span class="btn-label"><slot /></span>{icon ? <span class="btn-icon"><Icon name={icon} size={18} /></span> : null}</button>
+)}
+<style>
+  .btn { --bg: var(--accent-coral); --bg-hover: var(--accent-coral-dark); --fg: var(--text-on-accent);
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 56px; padding: 0 30px;
+    border-radius: var(--radius-pill); border: none; background: var(--bg); color: var(--fg);
+    font-family: var(--font-body); font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; transition: background 240ms ease-out; }
+  .btn--dark { --bg: var(--ink-900); --bg-hover: #2A2D45; --fg: #fff; }
+  .btn--surface { --bg: var(--surface); --bg-hover: #F3F4F8; --fg: var(--ink-900); box-shadow: var(--shadow-float); }
+  .btn--sm { height: 44px; padding: 0 20px; font-size: 14px; }
+  .btn--full { display: flex; width: 100%; }
+  .btn:hover:not(:disabled) { background: var(--bg-hover); color: var(--fg); }
+  .btn:disabled { cursor: not-allowed; opacity: .45; }
+  .btn[aria-busy="true"] { opacity: 1; }
+  .btn[aria-busy="true"] .btn-icon { display: none; }
+  .btn-icon { display: inline-flex; transition: transform 240ms ease-out; }
+  .btn:hover:not(:disabled) .btn-icon { transform: translateX(3px); }
+</style>

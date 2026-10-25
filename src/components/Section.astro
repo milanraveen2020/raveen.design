@@ -1,0 +1,11 @@
+---
+// Full-bleed chapter with a flat canvas color. Padding values are px; *Mobile applies under 768px.
+interface Props { bg?: 'blush' | 'blue' | 'cream'; id?: string; top?: number; bottom?: number; topMobile?: number; bottomMobile?: number; class?: string }
+const { bg = 'blush', id, top = 160, bottom = 160, topMobile, bottomMobile, class: cls } = Astro.props;
+const vars = `--bg:var(--canvas-${bg});--pt:${top}px;--pb:${bottom}px;--pt-m:${topMobile ?? Math.min(top, 96)}px;--pb-m:${bottomMobile ?? Math.min(bottom, 96)}px`;
+---
+<section id={id} class:list={['section', cls]} style={vars}><slot /></section>
+<style>
+  .section { background: var(--bg); padding: var(--pt) 0 var(--pb); }
+  @media (max-width: 767px) { .section { padding: var(--pt-m) 0 var(--pb-m); } }
+</style>

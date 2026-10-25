@@ -1,0 +1,6 @@
+:root{
+--radius-sm:8px;--radius-md:16px;--radius-lg:24px;--radius-xl:36px;--radius-round:50%;--radius-pill:999px;
+--shadow-card:0 16px 60px rgba(23,25,43,.08);
+--shadow-float:0 10px 42px rgba(23,25,43,.10);
+--focus-ring:0 0 0 3px var(--surface),0 0 0 6px var(--focus);
+}

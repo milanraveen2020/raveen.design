@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/ds/SiteHeader.astro';
+import SiteFooter from '../components/ds/SiteFooter.astro';
+import MailShortcut from '../components/ds/MailShortcut.astro';
+import ScrollProgress from '../components/ds/ScrollProgress.astro';
+import Button from '../components/ds/Button.astro';
+import { NAV, PROFILE, SOCIALS } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Footer copy variant. 'none' hides the footer + mail shortcut (the contact page has its own). */
+  footer?: 'home' | 'about' | 'default' | 'none';
+}
+const {
+  title,
+  description = 'Raveen Nanayakkara designs and builds fast, modern websites: UI/UX-led design, Astro and Next.js with a headless CMS, e-commerce, branding, hosting, SEO, and social media campaigns.',
+  footer = 'default',
+} = Astro.props;
+const bare = footer === 'none';
+const headline = footer === 'home' ? 'Have a project in mind?' : footer === 'about' ? 'Let’s create something useful.' : 'Let’s work together.';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const active = path.startsWith('/work') ? '/work' : path;
+const year = new Date().getFullYear();
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonical ? <link rel="canonical" href={canonical} /> : null}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <SiteHeader name={PROFILE.name} links={NAV} activeHref={active} />
+    <main id="main"><slot /></main>
+    {bare ? null : (
+      <SiteFooter headline={headline} email={PROFILE.email} socials={SOCIALS}>
+        {footer === 'home' ? <p slot="note">Whether you’re improving a digital product, building a new website, or looking for someone who understands both design and frontend development, I’d be glad to hear about it.</p> : null}
+        {footer === 'about' ? <p slot="note">I enjoy working with people who value thoughtful design, strong execution, and clear communication. If your project could benefit from that combination, let’s connect.</p> : null}
+        {footer !== 'about' ? <div slot="actions" class="footer-actions"><Button variant="dark" href="/contact">{footer === 'home' ? 'Let’s Talk' : 'Get in Touch'}</Button></div> : null}
+        <Fragment slot="legal"><span>© {year} Raveen Nanayakkara. All rights reserved.</span><span>Thoughtful design. Practical development.</span></Fragment>
+      </SiteFooter>
+    )}
+    {bare ? null : <MailShortcut href={'mailto:' + PROFILE.email} />}
+    <ScrollProgress />
+    <script>
+      // Scroll reveal for every .reveal element.
+      const els = document.querySelectorAll<HTMLElement>('.reveal');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        els.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        els.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>
+<style>
+  .footer-actions { display: flex; justify-content: center; margin-top: 28px; }
+</style>

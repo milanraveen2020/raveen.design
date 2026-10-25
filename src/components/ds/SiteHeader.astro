@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import logo from '../../images/logo.png';
+import NavLink from './NavLink.astro';
+interface Props { name: string; links: { label: string; href: string }[]; activeHref?: string }
+const { name, links, activeHref } = Astro.props;
+---
+<header class="site-header" data-site-header>
+  <div class="site-header-inner">
+    <a href={links[0]?.href ?? '/'} class="site-header-mark" aria-label={name + ', home'}><Image src={logo} alt="" height={52} densities={[1, 2]} format="webp" loading="eager" /></a>
+    <nav aria-label="Main" class="site-header-nav">
+      {links.map((l) => <NavLink href={l.href} active={l.href === activeHref}>{l.label}</NavLink>)}
+    </nav>
+    <button type="button" class="site-header-btn site-header-open" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu" data-menu-open><Icon name="menu" size={20} /></button>
+  </div>
+  <div id="site-menu" class="site-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden data-menu>
+    <div class="site-menu-top">
+      <a href={links[0]?.href ?? '/'} class="site-header-mark" aria-label={name + ', home'}><Image src={logo} alt="" height={52} densities={[1, 2]} format="webp" /></a>
+      <button type="button" class="site-header-btn" aria-label="Close menu" data-menu-close><Icon name="x" size={20} /></button>
+    </div>
+    <nav aria-label="Main" class="site-menu-nav">
+      {links.map((l) => <NavLink href={l.href} active={l.href === activeHref} large>{l.label}</NavLink>)}
+    </nav>
+  </div>
+</header>
+<style>
+  .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 92px; display: flex; align-items: center; background: transparent; transition: background 360ms var(--ease-out); }
+  .site-header.is-scrolled { background: rgba(255,255,255,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .site-header-inner { width: min(calc(100% - 48px), var(--container)); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; }
+  .site-header-mark { display: block; line-height: 0; }
+  .site-header-mark :global(img) { display: block; width: auto; height: 52px; }
+  .site-header-nav { display: flex; gap: 52px; }
+  .site-header-btn { width: 48px; height: 48px; border-radius: 50%; border: none; background: var(--surface); box-shadow: var(--shadow-float); display: grid; place-items: center; color: var(--ink-900); cursor: pointer; }
+  .site-header-open { display: none; }
+  .site-menu { position: fixed; inset: 0; z-index: 60; background: var(--canvas-blush); display: flex; flex-direction: column; padding: 14px 24px 40px; }
+  .site-menu[hidden] { display: none; }
+  .site-menu-top { height: 62px; display: flex; align-items: center; justify-content: space-between; }
+  .site-menu-nav { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+  @media (max-width: 991px) {
+    .site-header { height: 76px; }
+    .site-header-mark :global(img) { height: 42px; }
+    .site-header-nav { display: none; }
+    .site-header-open { display: grid; }
+  }
+  @media (max-width: 479px) { .site-header-inner { width: min(calc(100% - 32px), var(--container)); } }
+</style>
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  const setOpen = (open: boolean) => {
+    if (!menu || !openBtn) return;
+    menu.hidden = !open;
+    openBtn.setAttribute('aria-expanded', String(open));
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    (open ? closeBtn : openBtn)?.focus();
+  };
+  openBtn?.addEventListener('click', () => setOpen(true));
+  closeBtn?.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu && !menu.hidden) setOpen(false); });
+</script>

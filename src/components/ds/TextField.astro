@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+interface Props { label: string; name: string; type?: string; multiline?: boolean; rows?: number; required?: boolean; hint?: string; placeholder?: string; class?: string }
+const { label, name, type = 'text', multiline = false, rows = 4, required = false, hint, placeholder, class: cls } = Astro.props;
+const id = 'f-' + name;
+const errId = id + '-err';
+---
+<div class:list={['field', cls]} data-field={name}>
+  <label for={id}>{label}{required ? <span aria-hidden="true" class="req"> *</span> : null}</label>
+  {multiline
+    ? <textarea id={id} name={name} rows={rows} required={required} placeholder={placeholder} class="field-input field-input--multi"></textarea>
+    : <input id={id} name={name} type={type} required={required} placeholder={placeholder} class="field-input" />}
+  <div class="field-msg">
+    <span id={errId} class="field-err" hidden><Icon name="circle-alert" size={14} /><span data-err-text></span></span>
+    {hint ? <span class="field-hint">{hint}</span> : null}
+  </div>
+</div>
+<style>
+  .field { display: flex; flex-direction: column; gap: 2px; }
+  label { font-size: 13px; font-weight: 600; color: var(--ink-700); transition: color 220ms ease-out; }
+  .field:focus-within label { color: var(--ink-900); }
+  .req { color: var(--accent-coral); }
+  .field-input { --line-c: var(--line); width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid var(--line-c); background: transparent; outline: none;
+    font-family: var(--font-body); font-size: 17px; color: var(--ink-900); padding: 0; height: 52px; border-radius: 0;
+    transition: border-color 220ms ease-out, box-shadow 220ms ease-out; }
+  .field-input--multi { padding: 14px 0; height: auto; min-height: 128px; resize: vertical; }
+  .field-input:focus { --line-c: var(--ink-900); box-shadow: 0 1px 0 0 var(--line-c); }
+  .field-input:focus-visible { outline: none; }
+  .field.has-error label { color: var(--danger); }
+  .field.has-error .field-input { --line-c: var(--danger); }
+  .field-msg { min-height: 22px; padding-top: 6px; }
+  .field-err { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--danger); }
+  .field-err[hidden] { display: none; }
+  .field-hint { font-size: 13px; color: var(--ink-500); }
+  .field.has-error .field-hint { display: none; }
+</style>

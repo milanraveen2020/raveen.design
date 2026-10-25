@@ -1,0 +1,17 @@
+:root{
+--motion-instant:120ms;/* @kind other */
+--motion-fast:220ms;/* @kind other */
+--motion-base:360ms;/* @kind other */
+--motion-reveal:680ms;/* @kind other */
+--motion-image:900ms;/* @kind other */
+
+--ease-out:cubic-bezier(.22,1,.36,1);/* @kind other */
+--ease-standard:cubic-bezier(.2,.7,.2,1);/* @kind other */
+--ease-in-out:cubic-bezier(.65,0,.35,1);/* @kind other */
+
+--rotate-duration:11s;/* @kind other */
+
+}
+@keyframes rotate-ring{to{transform:rotate(360deg)}}
+@keyframes marquee-left{to{transform:translateX(-50%)}}
+@keyframes reveal-up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}

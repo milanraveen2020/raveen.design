@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import Portrait from './Portrait.astro';
+import logo from '../../images/logo.png';
+interface Props { headline: string; email: string; portrait?: string; socials?: { icon: string; label: string; href: string }[]; background?: string }
+const { headline, email, portrait, socials = [], background = 'var(--canvas-blush)' } = Astro.props;
+---
+<footer class="site-footer" style={`background:${background}`}>
+  <div class="site-footer-inner">
+    <Portrait size={112} src={portrait} alt="" />
+    <h2>{headline}</h2>
+    {Astro.slots.has('note') ? <div class="site-footer-note"><slot name="note" /></div> : null}
+    {Astro.slots.has('actions') ? <slot name="actions" /> : null}
+    <a href={'mailto:' + email} class="site-footer-email">{email}<span class="site-footer-email-btn"><span class="site-footer-email-arrow"><Icon name="arrow-up-right" size={18} strokeWidth={2} /></span></span></a>
+    {socials.length ? (
+      <div class="site-footer-socials">
+        {socials.map((s) => <a href={s.href} aria-label={s.label} target="_blank" rel="noreferrer" class="site-footer-social"><Icon name={s.icon} size={20} /></a>)}
+      </div>
+    ) : null}
+    <div class="site-footer-legal">
+      <a href="/" class="site-footer-logo" aria-label="Raveen Nanayakkara, home"><Image src={logo} alt="" height={40} densities={[1, 2]} format="webp" /></a>
+      <slot name="legal"><span>© 2026</span><span>All rights reserved</span></slot>
+    </div>
+  </div>
+</footer>
+<style>
+  .site-footer { padding: clamp(88px, 11vw, 160px) 0 clamp(40px, 4vw, 56px); }
+  .site-footer-inner { width: min(calc(100% - 48px), var(--container)); margin-inline: auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  h2 { margin: 32px 0 0; font-family: var(--font-display); font-weight: 500; font-size: var(--size-display-footer); line-height: 1.02; letter-spacing: -0.035em; color: var(--ink-900); }
+  .site-footer-note { margin: 20px 0 0; font-size: var(--size-body-lg); line-height: 1.5; color: var(--ink-700); max-width: 44ch; }
+  .site-footer-email { margin-top: 36px; display: inline-flex; align-items: center; gap: 12px; height: 60px; padding: 0 10px 0 28px; border-radius: var(--radius-pill); background: var(--surface); box-shadow: var(--shadow-float);
+    color: var(--ink-900); font-size: 18px; font-weight: 500; text-decoration: none; max-width: 100%; }
+  .site-footer-email:hover { color: var(--ink-900); }
+  .site-footer-email-btn { width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--ink-900); transition: background 300ms var(--ease-out); }
+  .site-footer-email-arrow { display: inline-flex; transition: transform 300ms var(--ease-out); }
+  .site-footer-email:hover .site-footer-email-btn { background: var(--accent-coral); }
+  .site-footer-email:hover .site-footer-email-arrow { transform: translate(2px, -2px); }
+  .site-footer-socials { margin-top: 28px; display: flex; gap: 8px; }
+  .site-footer-social { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; color: var(--ink-900); transition: transform 220ms ease-out, color 220ms ease-out; }
+  .site-footer-social:hover { color: var(--accent-coral); transform: translateY(-2px); }
+  .site-footer-legal { margin-top: clamp(64px, 8vw, 120px); width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px 24px; font-size: 13px; color: var(--ink-500); }
+  .site-footer-logo { display: block; line-height: 0; }
+  .site-footer-logo :global(img) { display: block; width: auto; height: 40px; }
+  @media (max-width: 479px) {
+    .site-footer-inner { width: min(calc(100% - 32px), var(--container)); }
+    .site-footer-email { font-size: 16px; padding-left: 20px; }
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Reveal from '../components/Reveal.astro';
+import PageHero from '../components/PageHero.astro';
+import TimelineList from '../components/TimelineList.astro';
+import ExtLink from '../components/ExtLink.astro';
+import portrait from '../images/about-portrait.png';
+import { EDUCATION, PROFILE, RECOMMENDATIONS, TIMELINE, TITLES } from '../data/site';
+---
+<BaseLayout title={TITLES['/about']} footer="about">
+  <PageHero label="About" title="A little about me" />
+
+  <Section bg="blush" top={0} topMobile={0}>
+    <div class="container about">
+      <div class="about-portrait">
+        <!-- Portrait cut out from src/images/about.jpg. -->
+        <div class="portrait">
+          <Image src={portrait} alt="Portrait of Raveen Nanayakkara" widths={[480, 720, 960]} sizes="(max-width: 991px) 100vw, 50vw" format="webp" loading="eager" />
+        </div>
+      </div>
+      <div class="stack" style="gap:80px">
+        <Reveal class="stack" style="gap:20px">
+          <p class="ds-body-lg" style="color:var(--ink-900)">I’m Raveen Nanayakkara, a web designer and developer with ten years of experience as a UI/UX engineer. I design and build fast, modern websites for businesses and look after everything around them, from branding and e-commerce to hosting, SEO, and campaigns that bring in leads.</p>
+          <p class="muted" style="max-width:58ch">My interest is not only in how a website looks but in how clearly it communicates, how naturally people can use it, and how well it is built. That UI/UX perspective shapes everything I make, from the first wireframe to the live site.</p>
+        </Reveal>
+        <Reveal class="stack" style="gap:20px">
+          <h2 class="ds-heading-lg" style="max-width:18ch">Combining creativity with implementation</h2>
+          <p class="muted" style="max-width:58ch">I began my documented professional design and development journey at Parkway Labs, working on website layouts, WordPress templates, landing pages, and visual assets. I later joined MillenniumIT ESP, where my work expanded into larger digital systems, interface engineering, user journeys, wireframes, and React interface implementation.</p>
+          <p class="muted" style="max-width:58ch">Over time, I’ve had opportunities to contribute to projects with very different user needs and constraints, including government services, enterprise software, and business websites. These experiences have strengthened my ability to think from both the user’s point of view and the development team’s perspective.</p>
+          <p class="muted" style="max-width:58ch">Today, my main focus is web design and development with modern technology: Astro and Next.js websites with headless CMSs such as Sanity and Strapi, e-commerce with Medusa.js or a custom shopping-cart CMS, and the hosting, SEO, analytics, and branding that go with them.</p>
+        </Reveal>
+        <Reveal id="experience"><h2 class="ds-heading-lg" style="margin:0 0 24px">Career timeline</h2><TimelineList items={TIMELINE} /></Reveal>
+        <Reveal><h2 id="education" class="ds-heading-lg" style="margin:0 0 24px">Education</h2><TimelineList items={EDUCATION} /></Reveal>
+      </div>
+    </div>
+  </Section>
+
+  <Section bg="blue">
+    <div class="container">
+      <SectionHead label="Professional recommendations" title="What collaborators have said" />
+      <div class="grid-2 recs">
+        {RECOMMENDATIONS.map((r, i) => (
+          <Reveal delay={i * 80} class="card rec">
+            <span class="label">Recommendation context</span>
+            <h3 class="ds-heading-md">{r.person}</h3>
+            <p class="muted">{r.body}</p>
+            <ExtLink href={PROFILE.linkedin} style="margin-top:auto">View on LinkedIn</ExtLink>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .about { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 80px; align-items: start; }
+  .about-portrait { position: sticky; top: 120px; }
+  .portrait { display: flex; align-items: flex-end; aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden;
+    background: radial-gradient(90% 70% at 50% 35%, color-mix(in srgb, var(--accent-coral) 80%, #fff 20%), var(--accent-coral) 75%); }
+  .portrait :global(img) { display: block; width: 100%; height: auto; }
+  .recs { margin-top: 64px; }
+  .recs :global(.rec) { border-radius: var(--radius-lg); padding: 44px 44px 36px; }
+
+  @media (max-width: 991px) {
+    .about { grid-template-columns: 1fr; gap: 48px; }
+    .about-portrait { position: relative; top: auto; }
+  }
+  @media (max-width: 767px) {
+    .recs { margin-top: 40px; }
+    .recs :global(.rec) { padding: 32px 28px; }
+  }
+</style>

@@ -1,0 +1,17 @@
+---
+interface Props { label: string; title: string; bg?: 'blush' | 'blue' | 'cream' }
+const { label, title, bg = 'blush' } = Astro.props;
+---
+<section class="page-hero" style={`--bg:var(--canvas-${bg})`}>
+  <div class="container">
+    <span class="label enter" style="--delay:80ms">{label}</span>
+    <h1 class="ds-display-page enter" style="--delay:140ms;--from:translateY(5%)">{title}</h1>
+    {Astro.slots.has('default') ? <div class="page-hero-body enter" style="--delay:280ms"><slot /></div> : null}
+  </div>
+</section>
+<style>
+  .page-hero { background: var(--bg); padding: 190px 0 100px; }
+  h1 { margin: 20px 0 0; max-width: 12ch; text-wrap: balance; }
+  .page-hero-body { margin-top: 44px; }
+  @media (max-width: 767px) { .page-hero { padding: 128px 0 64px; } .page-hero-body { margin-top: 28px; } }
+</style>
