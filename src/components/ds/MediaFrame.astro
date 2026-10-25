@@ -5,7 +5,7 @@ interface Props {
   zoomable?: boolean; zoomTitle?: string; hoverScale?: number; eager?: boolean; class?: string; style?: string;
 }
 const { src, alt = '', ratio = '4 / 3', ratioMobile, radius = 'var(--radius-lg)', tone = 'cream', placeholder = 'Image', zoomable = false, zoomTitle, hoverScale = 1.035, eager = false, class: cls, style } = Astro.props;
-const TONES: Record<string, string> = { blue: 'var(--canvas-blue)', blush: 'var(--canvas-blush)', cream: 'var(--canvas-cream)', coral: 'var(--accent-coral)', ink: 'var(--ink-900)', surface: 'var(--surface)' };
+const TONES: Record<string, string> = { sand: 'var(--canvas-sand)', blush: 'var(--canvas-blush)', cream: 'var(--canvas-cream)', coral: 'var(--accent-coral)', ink: 'var(--ink-900)', surface: 'var(--surface)' };
 const dark = tone === 'ink' || tone === 'coral';
 const Tag = zoomable ? 'button' : 'div';
 const vars = `--ratio:${ratio};--ratio-m:${ratioMobile ?? ratio};--radius:${radius};--tone:${TONES[tone] ?? tone};--hover-scale:${hoverScale};${style ?? ''}`;

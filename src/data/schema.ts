@@ -1,7 +1,7 @@
 // schema.org structured data (JSON-LD). One connected graph: the site, the person and the business share
 // stable @ids, so every page can point at them instead of repeating them.
 // Deliberately no aggregateRating: Google ignores (and may penalise) ratings a business publishes about itself.
-import { PROFILE, SERVICES, TIMELINE, EDUCATION, FAQ } from './site';
+import { PROFILE, SERVICES, EDUCATION, FAQ } from './site';
 import type { WebsiteCase } from './websites';
 
 type Node = Record<string, unknown>;
@@ -21,7 +21,6 @@ export const ids = (site: URL) => {
 export function baseGraph(site: URL): Node[] {
   const id = ids(site);
   const sameAs = [PROFILE.linkedin, PROFILE.behance, PROFILE.fiverr];
-  const current = TIMELINE.find((t) => t.org !== 'Fiverr' && !t.end);
   return [
     {
       '@type': 'WebSite',
@@ -43,7 +42,6 @@ export function baseGraph(site: URL): Node[] {
       description: 'Web designer and developer with ten years of UI/UX engineering experience.',
       email: 'mailto:' + PROFILE.email,
       address: { '@type': 'PostalAddress', addressLocality: 'Colombo', addressCountry: 'LK' },
-      ...(current ? { worksFor: { '@type': 'Organization', name: current.org } } : {}),
       alumniOf: EDUCATION.map((e) => ({ '@type': 'CollegeOrUniversity', name: e.org.replace(/, UK$/, '') })),
       knowsAbout: ['Web design', 'Web development', 'UI/UX design', 'Astro', 'Next.js', 'React', 'Sanity', 'Strapi', 'Medusa.js', 'E-commerce', 'Branding', 'Search engine optimization', 'Google Analytics', 'WordPress', 'Figma'],
       sameAs,
@@ -54,7 +52,7 @@ export function baseGraph(site: URL): Node[] {
       name: 'Raveen.design',
       url: id.abs('/'),
       logo: id.abs('/apple-touch-icon.png'),
-      image: id.abs('/og-image.jpg'),
+      image: id.abs('/og-hero.jpg'),
       description: 'Freelance web design and development: UI/UX-led websites, headless CMS builds, e-commerce, branding, hosting, SEO and social media campaigns.',
       founder: { '@id': id.person },
       email: PROFILE.email,

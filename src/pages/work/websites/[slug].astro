@@ -206,7 +206,7 @@ const isLight = (hex: string) => {
               </div>
             </Reveal>
             {(p.extraImages ?? []).map((g) => (
-              <Reveal><MediaFrame src={g.src} alt={g.alt} tone="blue" ratio="16 / 9" zoomable zoomTitle={g.title} hoverScale={1.02} /></Reveal>
+              <Reveal><MediaFrame src={g.src} alt={g.alt} tone="sand" ratio="16 / 9" zoomable zoomTitle={g.title} hoverScale={1.02} /></Reveal>
             ))}
           </div>
         </div>
@@ -240,14 +240,14 @@ const isLight = (hex: string) => {
 </BaseLayout>
 
 <style>
-  .hero { background: var(--canvas-blue); padding: 180px 0 80px; }
+  .hero { background: var(--canvas-sand); padding: 180px 0 80px; }
   .crumbs { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   h1 { margin: 24px 0 0; max-width: 14ch; text-wrap: balance; }
   h1.is-long { font-size: clamp(2.5rem, 6.4vw, 5.75rem); }
   .hero-sum { margin-top: 24px; max-width: 56ch; }
   .meta-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-top: 56px; }
   .meta-row :global(.meta) { flex: 1; }
-  .cover { background: linear-gradient(var(--canvas-blue) 50%, var(--canvas-cream) 50%); }
+  .cover { background: linear-gradient(var(--canvas-sand) 50%, var(--canvas-cream) 50%); }
   .body { background: var(--canvas-cream); padding: 72px 0 120px; }
 
   /* Section index */

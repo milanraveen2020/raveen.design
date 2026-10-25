@@ -1,0 +1,20 @@
+---
+// Floating WhatsApp shortcut. A plain wa.me link (no third-party widget), so it costs no JavaScript.
+import Icon from './Icon.astro';
+import WhatsAppIcon from './WhatsAppIcon.astro';
+interface Props { href: string }
+const { href } = Astro.props;
+---
+<a href={href} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp (opens in a new tab)" title="Chat on WhatsApp" class="chat-shortcut">
+  <span class="chat-slot chat-slot--a"><WhatsAppIcon size={22} /></span>
+  <span class="chat-slot chat-slot--b"><Icon name="arrow-up-right" size={20} /></span>
+</a>
+<style>
+  .chat-shortcut { position: fixed; right: max(28px, env(safe-area-inset-right)); bottom: max(28px, env(safe-area-inset-bottom)); z-index: 40; width: 52px; height: 52px; border-radius: 50%; overflow: hidden; display: inline-block;
+    background: var(--surface); box-shadow: var(--shadow-float); color: var(--ink-900); transition: color 320ms var(--ease-out); }
+  .chat-slot { position: absolute; inset: 0; display: grid; place-items: center; transition: transform 320ms var(--ease-out); }
+  .chat-slot--b { transform: translateY(100%); }
+  .chat-shortcut:hover, .chat-shortcut:focus-visible { color: var(--accent-coral); }
+  .chat-shortcut:hover .chat-slot--a, .chat-shortcut:focus-visible .chat-slot--a { transform: translateY(-100%); }
+  .chat-shortcut:hover .chat-slot--b, .chat-shortcut:focus-visible .chat-slot--b { transform: translateY(0); }
+</style>

@@ -2,7 +2,7 @@
 /* Ink */
 --ink-900:#17192B;--ink-700:#44485E;--ink-500:#61657A;
 /* Canvases (one per chapter) */
---canvas-blush:#FBE5E1;--canvas-blue:#DCEFFC;--canvas-cream:#FFF9F2;
+--canvas-blush:#FBE5E1;--canvas-sand:#F4E6D7;--canvas-cream:#FFF9F2;
 /* Surface + accent */
 --surface:#FFFFFF;--accent-coral:#F45B35;--accent-coral-dark:#D9461F;
   /* WCAG AA: the bright coral is for decoration and large text only (3.3:1 with white).
@@ -13,7 +13,7 @@
 --success:#267A58;--warning:#A76713;--danger:#B83E4E;--focus:#335CFF;
 /* Semantic aliases */
 --text-heading:var(--ink-900);--text-body:var(--ink-700);--text-muted:var(--ink-500);--text-on-accent:#FFFFFF;
---surface-page:var(--canvas-blush);--surface-work:var(--canvas-blue);--surface-alt:var(--canvas-cream);--surface-card:var(--surface);
+--surface-page:var(--canvas-blush);--surface-work:var(--canvas-sand);--surface-alt:var(--canvas-cream);--surface-card:var(--surface);
 --action-primary:var(--accent-coral-strong);--action-primary-hover:var(--accent-coral-text);--action-dark:var(--ink-900);
 --border-field:var(--line);--border-field-focus:var(--ink-900);
 }

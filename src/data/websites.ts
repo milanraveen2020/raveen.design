@@ -8,7 +8,7 @@ export interface WebsiteCase {
   slug: string; name: string; url: string; prototype?: boolean;
   /** Shown in the home page's featured websites. */
   featured?: boolean;
-  tone: 'blush' | 'blue' | 'cream'; brand: string;
+  tone: 'blush' | 'sand' | 'cream'; brand: string;
   category: string; summary: string;
   meta: { label: string; value: string }[];
   lead: string; challenge: string;
@@ -124,7 +124,7 @@ export const WEBSITES: WebsiteCase[] = [
   },
   {
     slug: 'dc-indoor-air-quality', name: 'DC Indoor Air Quality', url: 'https://dcindoorairqualitystl.com/', featured: true,
-    tone: 'blue', brand: '#0a1714',
+    tone: 'sand', brand: '#0a1714',
     category: 'Home services · Website design & development · WordPress',
     summary: 'A lead-generating website for an air duct and HVAC cleaning company in St. Louis, designed to build trust and turn visits into quote requests.',
     meta: [
@@ -169,7 +169,7 @@ export const WEBSITES: WebsiteCase[] = [
   },
   {
     slug: 'lusterblue', name: 'LusterBlue', url: 'https://lusterblue.lk/',
-    tone: 'blue', brand: '#2077b0',
+    tone: 'sand', brand: '#2077b0',
     category: 'Jewellery · E-commerce website · WooCommerce',
     summary: 'An online store for 925 sterling silver gemstone jewellery made in Sri Lanka, with personalised pieces, astrology collections and islandwide delivery.',
     meta: [
@@ -260,7 +260,7 @@ export const WEBSITES: WebsiteCase[] = [
   },
   {
     slug: 'millenniumit-esp', name: 'MillenniumIT ESP', url: 'https://www.mitesp.com/',
-    tone: 'blue', brand: '#000104',
+    tone: 'sand', brand: '#000104',
     category: 'Enterprise IT · Corporate website · WordPress',
     summary: 'Design and development of the corporate website for one of Sri Lanka’s largest IT companies, delivered on a tight timeline.',
     meta: [
@@ -349,7 +349,7 @@ export const WEBSITES: WebsiteCase[] = [
   },
   {
     slug: 'quantumgrid', name: 'QuantumGrid', url: 'https://auantumv2.vercel.app/', prototype: true,
-    tone: 'blue', brand: '#0a0b0f',
+    tone: 'sand', brand: '#0a0b0f',
     category: 'Enterprise IT · Website prototype · Astro',
     summary: 'A website prototype for a managed IT services provider, built with Astro for speed and organised around services, solutions and industries.',
     meta: [

@@ -13,6 +13,9 @@ import teamwork from '../images/expertise/working-with-product-and-engineering-t
 
 export const PROFILE = {
   name: 'Raveen Nanayakkara', email: 'rmnanayakkara@yahoo.com',
+  phone: '+94 77 961 1819',
+  // wa.me opens a WhatsApp chat with this message already typed.
+  whatsapp: 'https://wa.me/94779611819?text=' + encodeURIComponent('Hi Raveen, I’d like to talk about a website project.'),
   headline: 'Web Designer & Developer · UI/UX Engineer',
   linkedin: 'https://lk.linkedin.com/in/raveen-nanayakkara-262933101',
   behance: 'https://www.behance.net/raveennanayakkara',
@@ -104,10 +107,8 @@ export const WEB_DESIGN = {
 
 export const TIMELINE = [
   { start: '2019', end: '', role: 'Freelance Web Designer & Developer', org: 'Fiverr', body: 'Gather client requirements, design custom interfaces from scratch, and develop them into responsive websites, from design through to hosting setup. Rated 5.0 across 100 client reviews.' },
-  { start: 'Jul 2026', end: '', role: 'Associate Tech Lead – UI/UX', org: 'MillenniumIT ESP', body: 'Lead UI/UX work across projects, guiding user journeys, wireframes, and interface design from requirements through to implementation, and working with development teams to keep design and build aligned.' },
-  { start: 'Aug 2022', end: 'Jul 2026', role: 'Senior Engineer – UI/UX', org: 'MillenniumIT ESP', body: 'Led or coordinated assigned UI/UX deliverables against project requirements and deadlines; designed and refined user journeys; created low- and high-fidelity wireframes; implemented React UI components from Figma designs; and supported corporate WordPress website updates.' },
-  { start: 'May 2019', end: 'Aug 2022', role: 'UI/UX Engineer', org: 'MillenniumIT ESP', body: 'Contributed to interface design, wireframing, user journeys, and the transition from designs into functional web interfaces. Collaborated with project stakeholders and development teams on business and client requirements.' },
-  { start: 'May 2017', end: 'May 2019', role: 'UI Designer / Developer', org: 'Parkway Labs (Pvt) Ltd', body: 'Designed interfaces for web applications and websites, and designed and developed WordPress and Bootstrap themes. Also created landing pages in Figma or Sketch, supported hosting-related tasks, and produced digital assets in Photoshop and Illustrator.' },
+  { start: '2019', end: '', role: 'UI/UX Engineering', org: 'MillenniumIT ESP', body: 'Grew from UI/UX Engineer to Senior Engineer and Associate Tech Lead on enterprise software products: user journeys, low- and high-fidelity wireframes, interface design, React UI components built from Figma, and the company’s corporate website. Working closely with development teams to keep design and build aligned.' },
+  { start: '2017', end: '2019', role: 'UI Designer / Developer', org: 'Parkway Labs (Pvt) Ltd', body: 'Designed interfaces for web applications and websites, built WordPress and Bootstrap themes, created landing pages, and produced digital assets.' },
 ];
 export const EDUCATION = [
   { start: '2018', end: '2021', role: 'Bachelor of Computer Science', org: 'Canterbury Christ Church University, UK', body: 'Focused on building the technical foundation that supports my work across user interface engineering and web development.' },

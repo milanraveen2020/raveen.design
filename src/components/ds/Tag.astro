@@ -1,5 +1,5 @@
 ---
-interface Props { tone?: 'surface' | 'blush' | 'blue' | 'outline' | 'coral'; shape?: 'tag' | 'chip'; class?: string }
+interface Props { tone?: 'surface' | 'blush' | 'sand' | 'outline' | 'coral'; shape?: 'tag' | 'chip'; class?: string }
 const { tone = 'outline', shape = 'tag', class: cls } = Astro.props;
 ---
 <span class:list={['tag', 'tag--' + shape, 'tag--' + tone, cls]}><slot /></span>
@@ -12,6 +12,6 @@ const { tone = 'outline', shape = 'tag', class: cls } = Astro.props;
   .tag--chip { padding: 8px 16px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 500; letter-spacing: 0; text-transform: none; }
   .tag--surface { --bg: var(--surface); --fg: var(--ink-900); --bd: transparent; }
   .tag--blush { --bg: var(--canvas-blush); --fg: var(--ink-900); --bd: transparent; }
-  .tag--blue { --bg: var(--canvas-blue); --fg: var(--ink-900); --bd: transparent; }
+  .tag--sand { --bg: var(--canvas-sand); --fg: var(--ink-900); --bd: transparent; }
   .tag--coral { --bg: var(--accent-coral-strong); --fg: #fff; --bd: transparent; }
 </style>

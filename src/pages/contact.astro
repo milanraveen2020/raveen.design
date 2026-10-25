@@ -5,6 +5,7 @@ import FormStatus from '../components/ds/FormStatus.astro';
 import Icon from '../components/ds/Icon.astro';
 import Tag from '../components/ds/Tag.astro';
 import TextField from '../components/ds/TextField.astro';
+import WhatsAppIcon from '../components/ds/WhatsAppIcon.astro';
 import { INQUIRY, PROFILE, DESCRIPTIONS, TITLES } from '../data/site';
 import { LIMITS } from '../lib/contact';
 
@@ -54,6 +55,7 @@ const site = Astro.site!;
 
         <aside class="contact-aside">
           <div><span class="label">Email</span><a href={'mailto:' + PROFILE.email} class="contact-email">{PROFILE.email}</a></div>
+          <div><span class="label">WhatsApp</span><a href={PROFILE.whatsapp} target="_blank" rel="noopener noreferrer" class="contact-wa"><WhatsAppIcon size={22} />{PROFILE.phone}<span class="sr-only"> (opens WhatsApp in a new tab)</span></a></div>
           <div><span class="label">Elsewhere</span>
             <div class="contact-links">
               {links.map((s) => <a href={s.href} target="_blank" rel="noreferrer" class="site-ext contact-link"><Icon name={s.icon} size={20} />{s.label}</a>)}
@@ -94,6 +96,9 @@ const site = Astro.site!;
   .contact-aside { display: flex; flex-direction: column; gap: 40px; }
   .contact-email { display: inline-block; margin-top: 10px; font-family: var(--font-display); font-size: 24px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink-900); text-decoration: none; word-break: break-all; }
   .contact-email:hover { color: var(--accent-coral-text); }
+  .contact-wa { display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; font-family: var(--font-display); font-size: 24px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink-900); text-decoration: none; }
+  .contact-wa:hover { color: var(--accent-coral-text); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: -1px; padding: 0; white-space: nowrap; }
   .contact-links { display: flex; flex-direction: column; gap: 2px; margin-top: 10px; }
   .contact-link { gap: 12px; font-size: 17px; }
   .contact-legal { margin-top: 160px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--ink-500); }
@@ -105,7 +110,7 @@ const site = Astro.site!;
     .contact-form :global(.submit) { display: flex; width: 100%; }
     .contact-legal { margin-top: 96px; }
   }
-  @media (max-width: 479px) { .contact-email { font-size: 20px; } }
+  @media (max-width: 479px) { .contact-email, .contact-wa { font-size: 20px; } }
 </style>
 
 <script>

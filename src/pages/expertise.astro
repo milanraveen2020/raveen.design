@@ -22,7 +22,7 @@ const groups = await Promise.all(SKILL_GROUPS.map(async (g) => ({ ...g, image: (
 
   <section class="marquee" aria-hidden="true" data-marquee-section><SkillMarquee rows={SKILL_ROWS} /></section>
 
-  <Section bg="blue">
+  <Section bg="sand">
     <div class="container groups">
       {groups.map((g, i) => (
         <div class:list={['group', i % 2 === 1 && 'group--flip']}>
@@ -59,8 +59,8 @@ const groups = await Promise.all(SKILL_GROUPS.map(async (g) => ({ ...g, image: (
   </Section>
 </BaseLayout>
 <style>
-  /* Hairline in the illustrations' own mid blue, so the light-blue images have a soft edge */
-  :global(.group-media) :global(.media-frame) { border: 1px solid #A3BBDD; }
+  /* Hairline in the illustrations' own clay, so the sand images have a soft edge on the sand section */
+  :global(.group-media) :global(.media-frame) { border: 1px solid #D9BCA6; }
   .faq { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
   .faq-item { border-top: 1px solid var(--line); }
   .faq-item:last-child { border-bottom: 1px solid var(--line); }
