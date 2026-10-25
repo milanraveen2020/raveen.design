@@ -10,7 +10,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/vercel": "11.0.13",
     "astro": "7.3.8",
-    "lucide-static": "^0.469.0"
+    "lucide-static": "^0.469.0",
+    "resend": "6.32.1"
   }
 }

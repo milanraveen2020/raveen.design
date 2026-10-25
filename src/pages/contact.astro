@@ -24,13 +24,11 @@ const year = new Date().getFullYear();
       <div class="contact-grid enter" style="--delay:420ms">
         <div>
           <FormStatus status="success" title="Thanks for reaching out." hidden data-form-sent>Your message has been submitted. I’ll get back to you when I can.</FormStatus>
-          <!--
-            The form validates in the browser and then simulates a send, like the original prototype.
-            To receive messages, set `action` to a form endpoint (Formspree, Netlify Forms, your own API)
-            and set data-endpoint="real" so the script POSTs the data there.
-          -->
-          <form novalidate class="contact-form" data-contact-form action="" method="post">
+          <!-- Validates in the browser, then POSTs to /api/contact (src/pages/api/contact.ts), which emails it via Resend. -->
+          <form novalidate class="contact-form" data-contact-form action="/api/contact" method="post">
             <FormStatus status="error" class="span-2 form-error" hidden data-form-error>Your message couldn’t be sent. Please try again or contact me by email.</FormStatus>
+            <!-- Honeypot: hidden from people and screen readers; bots that fill it are ignored by the API. -->
+            <div class="hp" aria-hidden="true"><label>Company <input type="text" name="company" tabindex="-1" autocomplete="off" /></label></div>
             <TextField label="Name" name="name" required />
             <TextField label="Email" name="email" type="email" required />
             <fieldset class="span-2 types" data-field="type">
@@ -73,6 +71,7 @@ const year = new Date().getFullYear();
   .contact-grid { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); gap: 96px; margin-top: 96px; align-items: start; }
   .contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
   .contact-form[hidden] { display: none; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .contact-form :global(.span-2) { grid-column: 1 / -1; }
   .contact-form :global(.form-error) { margin-bottom: 16px; }
   .types { border: 0; margin: 12px 0 20px; padding: 0; }
@@ -143,11 +142,12 @@ const year = new Date().getFullYear();
 
     if (submit) { submit.disabled = true; submit.setAttribute('aria-busy', 'true'); submit.querySelector('.btn-label')!.textContent = 'Sending…'; }
     try {
-      if (form.dataset.endpoint === 'real' && form.action) {
-        const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-        if (!res.ok) throw new Error(String(res.status));
-      } else {
-        await new Promise((r) => setTimeout(r, 1100));
+      const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      if (!res.ok) {
+        // The API re-checks the fields; show its messages next to the inputs if it rejects any.
+        const body = await res.json().catch(() => ({}));
+        if (body.errors) Object.entries(body.errors as Record<string, string>).forEach(([k, msg]) => setError(k, msg));
+        throw new Error(String(res.status));
       }
       form.hidden = true;
       if (sent) { sent.hidden = false; sent.focus(); }

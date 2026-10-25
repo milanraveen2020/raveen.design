@@ -1,11 +1,22 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
   // Set this to your production URL so canonical links and sitemaps resolve correctly.
   site: 'https://raveen-nanayakkara.example',
   trailingSlash: 'ignore',
+  // Pages stay static; only /api/contact runs as a Vercel function (it opts out with `prerender = false`).
+  adapter: vercel(),
+  // Contact form email (Resend). Set these in Vercel → Settings → Environment Variables, and in .env locally.
+  env: {
+    schema: {
+      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      CONTACT_TO: envField.string({ context: 'server', access: 'secret', default: 'rmnanayakkara@yahoo.com' }),
+      CONTACT_FROM: envField.string({ context: 'server', access: 'secret', default: 'Raveen.design <onboarding@resend.dev>' }),
+    },
+  },
   // Old URLs that moved.
   redirects: {
     '/work/millenniumit-esp-website': '/work/websites/millenniumit-esp',

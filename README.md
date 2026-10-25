@@ -35,3 +35,11 @@ npm run build    # static output in dist/
 - **Images**: expertise illustrations are in `src/images/expertise/` (named after each group title) and imported in `src/data/site.ts`; website screenshots are in `public/images/websites/`.
   The About portrait is a placeholder frame.
 - Set `site` in `astro.config.mjs` to your production URL so canonical links are correct.
+
+## Contact form (Resend)
+
+The contact form posts to `/api/contact` (`src/pages/api/contact.ts`), a Vercel function that emails each enquiry via [Resend](https://resend.com). Every other page stays static.
+
+1. Create a Resend API key and add it as `RESEND_API_KEY` in Vercel → Settings → Environment Variables (and in a local `.env`, see `.env.example`).
+2. Enquiries go to `CONTACT_TO` (default `rmnanayakkara@yahoo.com`), with the visitor's address as Reply-To.
+3. Until a domain is verified in Resend, the sender is `onboarding@resend.dev`, which only delivers to the email the Resend account was created with. After verifying a domain, set `CONTACT_FROM`, e.g. `Raveen.design <hello@yourdomain.com>`.
