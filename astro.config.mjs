@@ -9,6 +9,11 @@ export default defineConfig({
   // The production URL: canonical links, the sitemap, robots.txt and social cards are all built from it.
   // When a custom domain is added, set SITE_URL in Vercel (e.g. https://raveen.design) or change the default here.
   site: process.env.SITE_URL || 'https://raveendesign.vercel.app',
+  vite: {
+    // CSS browser targets for lightningcss. Safari before 18 only understands -webkit-backdrop-filter;
+    // without Safari 15–17 listed, the minifier drops that prefix and the header blur disappears there.
+    build: { cssTarget: ['chrome107', 'edge107', 'firefox104', 'safari15', 'ios15'] },
+  },
   // One URL per page: /work, never /work/ (Vercel 308-redirects the slash version), matching every internal link.
   trailingSlash: 'never',
   integrations: [
