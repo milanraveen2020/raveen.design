@@ -48,6 +48,26 @@ export const DESCRIPTIONS: Record<string, string> = {
 };
 
 // What I offer clients (home grid). The first one is the lead service.
+// Expertise page FAQ. Answers only state what the site already says elsewhere; add pricing or timelines here once decided.
+export const FAQ = [
+  { q: 'What services do you offer?',
+    a: 'UI/UX-led website design, fast websites built with a headless CMS, online stores with payment integration, logo and brand kits, SEO and analytics setup, social media campaigns, and hosting with ongoing care.' },
+  { q: 'Which technologies do you build websites with?',
+    a: 'Mostly Astro or Next.js, with Sanity or Strapi as the content system. Online stores run on Medusa.js or a custom shopping-cart CMS. I also build and update WordPress sites, and design everything in Figma first.' },
+  { q: 'Can I update the website content myself?',
+    a: 'Yes. Sites built with a headless CMS such as Sanity or Strapi come with an editor where you can change text, images and pages yourself, without touching code.' },
+  { q: 'I don’t have a logo or brand yet. Can you help?',
+    a: 'Yes. I can design your logo and a brand kit first, so the website starts with a clear identity: colours, typography and how your brand should look across pages and social media.' },
+  { q: 'Will my website be ready for Google?',
+    a: 'Every site launches with the SEO essentials in place: a sitemap, page titles and descriptions, structured data, fast loading, and Google Analytics so you can see where visitors come from.' },
+  { q: 'Do you host and look after websites after launch?',
+    a: 'Yes. I can deploy and host your site and look after it afterwards, so you don’t have to deal with the technical side.' },
+  { q: 'Do you work with clients outside Sri Lanka?',
+    a: 'Yes. I’m based in Colombo, Sri Lanka, and work with clients remotely, wherever they are.' },
+  { q: 'How do we get started?',
+    a: 'Send a short message through the contact page about your business and what you need. I’ll reply to talk through your goals and the next steps.' },
+];
+
 export const SERVICES = [
   { icon: 'panels-top-left', title: 'UI/UX-led website design',
     body: 'Ten years as a UI/UX engineer shape every page I design: clear structure, considered hierarchy, and journeys that guide visitors to get in touch or buy.' },

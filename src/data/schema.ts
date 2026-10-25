@@ -1,7 +1,7 @@
 // schema.org structured data (JSON-LD). One connected graph: the site, the person and the business share
 // stable @ids, so every page can point at them instead of repeating them.
 // Deliberately no aggregateRating: Google ignores (and may penalise) ratings a business publishes about itself.
-import { PROFILE, SERVICES, TIMELINE, EDUCATION } from './site';
+import { PROFILE, SERVICES, TIMELINE, EDUCATION, FAQ } from './site';
 import type { WebsiteCase } from './websites';
 
 type Node = Record<string, unknown>;
@@ -118,5 +118,14 @@ export function caseList(site: URL, items: WebsiteCase[]): Node {
   return {
     '@type': 'ItemList',
     itemListElement: items.map((w, i) => ({ '@type': 'ListItem', position: i + 1, url: id.abs('/work/websites/' + w.slug), name: w.name })),
+  };
+}
+
+export function faqPage(site: URL, path: string): Node {
+  const id = ids(site);
+  return {
+    '@type': 'FAQPage',
+    '@id': id.abs(path) + '#faq',
+    mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   };
 }

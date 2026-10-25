@@ -21,6 +21,9 @@ export interface WebsiteCase {
   principles: string[];
   build: string[];
   note?: string;
+  /** Measurable outcomes (e.g. { value: '2.1×', label: 'more enquiries in the first three months' }).
+   *  Shown as a "Results" chapter only when present, so only add real, verifiable numbers. */
+  results?: { value: string; label: string }[];
   extraImages?: { src: string; alt: string; title: string }[];
 }
 

@@ -13,8 +13,8 @@ import { page, breadcrumbs, caseList } from '../../data/schema';
 const site = Astro.site!;
 ---
 <BaseLayout title={TITLES['/work']} description={DESCRIPTIONS['/work']} schema={[page(site, '/work', 'CollectionPage', TITLES['/work'], DESCRIPTIONS['/work'], { mainEntity: caseList(site, WEBSITES) }), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Work', path: '/work' }])]}>
-  <PageHero label="Work" title="Websites and digital products" bg="cream">
-    <p class="ds-body-lg muted" style="max-width:56ch">Websites I’ve designed and built for businesses, each with a case study covering the user journey, wireframes, design system, and build.</p>
+  <PageHero label="Work" title="Web design & development portfolio" bg="cream">
+    <p class="ds-body-lg muted" style="max-width:56ch">Business websites, online stores and web products I’ve designed and built, each with a case study covering the user journey, wireframes, design system, and build.</p>
   </PageHero>
 
   <!-- Websites: the main line of work -->
