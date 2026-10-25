@@ -6,9 +6,14 @@ import PageHero from '../components/PageHero.astro';
 import MediaFrame from '../components/ds/MediaFrame.astro';
 import Tag from '../components/ds/Tag.astro';
 import SkillMarquee from '../components/ds/SkillMarquee.astro';
-import { SKILL_GROUPS, SKILL_ROWS, TITLES } from '../data/site';
+import { SKILL_GROUPS, SKILL_ROWS, DESCRIPTIONS, TITLES } from '../data/site';
+import { page, breadcrumbs, servicesCatalog } from '../data/schema';
+import { getImage } from 'astro:assets';
+const site = Astro.site!;
+// The source illustrations are 1448px JPGs; ~1120px WebP covers the column at 2x for a fraction of the weight.
+const groups = await Promise.all(SKILL_GROUPS.map(async (g) => ({ ...g, image: (await getImage({ src: g.image, width: 1120, format: 'webp', quality: 80 })).src })));
 ---
-<BaseLayout title={TITLES['/expertise']}>
+<BaseLayout title={TITLES['/expertise']} description={DESCRIPTIONS['/expertise']} schema={[page(site, '/expertise', 'WebPage', TITLES['/expertise'], DESCRIPTIONS['/expertise'], { mainEntity: { '@id': new URL('/expertise#services', site).href } }), servicesCatalog(site), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Expertise', path: '/expertise' }])]}>
   <PageHero label="Expertise" title="From brand to launch">
     <p class="ds-body-lg muted" style="max-width:58ch">My work covers the whole life of a website: brand, UI/UX-led design, fast development with a headless CMS, e-commerce, hosting, SEO, and the campaigns that bring in leads. Behind it all are ten years of UI/UX engineering on complex digital products.</p>
   </PageHero>
@@ -17,7 +22,7 @@ import { SKILL_GROUPS, SKILL_ROWS, TITLES } from '../data/site';
 
   <Section bg="blue">
     <div class="container groups">
-      {SKILL_GROUPS.map((g, i) => (
+      {groups.map((g, i) => (
         <div class:list={['group', i % 2 === 1 && 'group--flip']}>
           <Reveal class="group-media"><MediaFrame src={g.image} alt={g.alt} ratio="5 / 4" ratioMobile="4 / 3" tone="cream" /></Reveal>
           <Reveal delay={80} class="stack" style="gap:18px">

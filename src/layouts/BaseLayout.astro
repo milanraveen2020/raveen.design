@@ -6,17 +6,36 @@ import MailShortcut from '../components/ds/MailShortcut.astro';
 import ScrollProgress from '../components/ds/ScrollProgress.astro';
 import Button from '../components/ds/Button.astro';
 import { NAV, PROFILE, SOCIALS } from '../data/site';
+import { baseGraph } from '../data/schema';
 
 interface Props {
   title: string;
   description?: string;
   /** Footer copy variant. 'none' hides the footer + mail shortcut (the contact page has its own). */
   footer?: 'home' | 'about' | 'default' | 'none';
+  /** Keep this page out of search results (e.g. the 404 page). */
+  noindex?: boolean;
+  /** Social share image: a path under /public (e.g. /images/websites/x.jpg). Defaults to the branded card. */
+  image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  /** 'article' for case studies, 'website' for everything else. */
+  type?: 'website' | 'article';
+  /** Page-specific schema.org nodes, added to the site-wide graph (WebSite, Person, ProfessionalService). */
+  schema?: Record<string, unknown>[];
 }
 const {
   title,
-  description = 'Raveen Nanayakkara designs and builds fast, modern websites: UI/UX-led design, Astro and Next.js with a headless CMS, e-commerce, branding, hosting, SEO, and social media campaigns.',
+  description = 'Web designer and developer with 10 years of UI/UX engineering. Fast Astro and Next.js websites, e-commerce, branding, hosting and SEO for businesses.',
   footer = 'default',
+  noindex = false,
+  image = '/og-image.jpg',
+  imageAlt = 'Raveen Nanayakkara, web designer and developer',
+  imageWidth = 1200,
+  imageHeight = 630,
+  type = 'website',
+  schema = [],
 } = Astro.props;
 const bare = footer === 'none';
 const headline = footer === 'home' ? 'Have a project in mind?' : footer === 'about' ? 'Let’s create something useful.' : 'Let’s work together.';
@@ -24,7 +43,10 @@ const headline = footer === 'home' ? 'Have a project in mind?' : footer === 'abo
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const active = path.startsWith('/work') ? '/work' : path;
 const year = new Date().getFullYear();
-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+// Canonical URL without a trailing slash (trailingSlash: 'never'), on the production domain.
+const canonical = noindex || !Astro.site ? undefined : new URL(path, Astro.site).href;
+const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
+const jsonLd = Astro.site && !noindex ? JSON.stringify({ '@context': 'https://schema.org', '@graph': [...baseGraph(Astro.site), ...schema] }).replace(/</g, '\\u003c') : null;
 ---
 <!doctype html>
 <html lang="en">
@@ -34,9 +56,28 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <title>{title}</title>
     <meta name="description" content={description} />
     {canonical ? <link rel="canonical" href={canonical} /> : null}
+    {noindex ? <meta name="robots" content="noindex" /> : null}
+    <!-- Social cards (Open Graph for LinkedIn, Facebook, WhatsApp; Twitter/X) -->
+    <meta property="og:site_name" content="Raveen.design" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    {canonical ? <meta property="og:url" content={canonical} /> : null}
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <meta name="author" content="Raveen Nanayakkara" />
+    {jsonLd ? <script type="application/ld+json" set:html={jsonLd} /> : null}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Sora:wght@400;500;600&display=swap" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

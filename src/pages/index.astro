@@ -11,10 +11,12 @@ import Reveal from '../components/Reveal.astro';
 import ArrowLink from '../components/ds/ArrowLink.astro';
 import SiteMockup from '../components/SiteMockup.astro';
 import ProjectCard from '../components/ds/ProjectCard.astro';
-import { TITLES } from '../data/site';
+import { DESCRIPTIONS, TITLES } from '../data/site';
 import { WEBSITES } from '../data/websites';
+import { page } from '../data/schema';
+const site = Astro.site!;
 ---
-<BaseLayout title={TITLES['/']} footer="home">
+<BaseLayout title={TITLES['/']} description={DESCRIPTIONS['/']} schema={[page(site, '/', 'WebPage', TITLES['/'], DESCRIPTIONS['/'])]} footer="home">
   <HeroSplit />
 
   <HeroBridge />

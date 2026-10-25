@@ -8,9 +8,11 @@ import PageHero from '../components/PageHero.astro';
 import TimelineList from '../components/TimelineList.astro';
 import ExtLink from '../components/ExtLink.astro';
 import portrait from '../images/about-portrait.png';
-import { EDUCATION, PROFILE, RECOMMENDATIONS, TIMELINE, TITLES } from '../data/site';
+import { EDUCATION, PROFILE, RECOMMENDATIONS, TIMELINE, DESCRIPTIONS, TITLES } from '../data/site';
+import { page, breadcrumbs, ids } from '../data/schema';
+const site = Astro.site!;
 ---
-<BaseLayout title={TITLES['/about']} footer="about">
+<BaseLayout title={TITLES['/about']} description={DESCRIPTIONS['/about']} schema={[page(site, '/about', 'ProfilePage', TITLES['/about'], DESCRIPTIONS['/about'], { mainEntity: { '@id': ids(site).person } }), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }])]} footer="about">
   <PageHero label="About" title="A little about me" />
 
   <Section bg="blush" top={0} topMobile={0}>

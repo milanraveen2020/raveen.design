@@ -1,6 +1,6 @@
 // Website case studies (/work and /work/websites/[slug]).
 // Facts (pages, journeys, colours, fonts, tech) were taken from each live site in October 2026.
-// Screenshots live in /public/images/websites/<slug>.jpg and <slug>-mobile.jpg.
+// Screenshots live in /public/images/websites/<slug>.jpg and <slug>-mobile.jpg, each with a .webp copy used on the page.
 // To add real wireframes or design files later, put images in /public and list them in `extraImages`.
 
 export interface Swatch { name: string; hex: string }
@@ -24,9 +24,11 @@ export interface WebsiteCase {
   extraImages?: { src: string; alt: string; title: string }[];
 }
 
-const shot = (slug: string) => '/images/websites/' + slug + '.jpg';
-export const desktopShot = shot;
-export const mobileShot = (slug: string) => '/images/websites/' + slug + '-mobile.jpg';
+// On-page screenshots are WebP (about a third of the JPG weight). The JPG stays for og:image and schema,
+// since some social crawlers still don't read WebP.
+export const desktopShot = (slug: string) => '/images/websites/' + slug + '.webp';
+export const mobileShot = (slug: string) => '/images/websites/' + slug + '-mobile.webp';
+export const shareShot = (slug: string) => '/images/websites/' + slug + '.jpg';
 
 export const WEBSITES: WebsiteCase[] = [
   {

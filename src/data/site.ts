@@ -31,10 +31,20 @@ export const NAV = [
   { label: 'Expertise', href: '/expertise' }, { label: 'Contact', href: '/contact' },
 ];
 
+// Search titles (≤ 60 characters) and meta descriptions (≤ 155) for each main page.
 export const TITLES: Record<string, string> = {
-  '/': 'Raveen Nanayakkara — Web Designer & Developer, UI/UX Engineer', '/about': 'About Raveen Nanayakkara',
-  '/work': 'Websites & Projects — Raveen Nanayakkara', '/expertise': 'UX/UI Design & Web Development Expertise', '/contact': 'Contact Raveen Nanayakkara',
-  '/work/web-projects': 'Website projects — Raveen Nanayakkara',
+  '/': 'Raveen Nanayakkara — Web Designer & Developer, Sri Lanka',
+  '/work': 'Web Design Portfolio & Case Studies | Raveen Nanayakkara',
+  '/about': 'About Raveen Nanayakkara — Web Designer & UI/UX Engineer',
+  '/expertise': 'Web Design, Development & SEO Services | Raveen Nanayakkara',
+  '/contact': 'Contact Raveen Nanayakkara — Start Your Website Project',
+};
+export const DESCRIPTIONS: Record<string, string> = {
+  '/': 'Web designer and developer with 10 years of UI/UX engineering. Fast Astro and Next.js websites, e-commerce, branding, hosting and SEO for businesses.',
+  '/work': 'Websites I’ve designed and built for restaurants, healthcare, IT and service businesses, with case studies on user journeys, wireframes and design systems.',
+  '/about': 'Ten years of UI/UX engineering at MillenniumIT ESP and Parkway Labs, now designing and building fast, modern websites for businesses as a freelancer.',
+  '/expertise': 'UI/UX-led web design, Astro and Next.js development with Sanity or Strapi, Medusa.js e-commerce, logo and brand kits, SEO, analytics and social campaigns.',
+  '/contact': 'Need a new website, online store or brand? Tell me about your business and project, and I’ll reply with next steps. Freelance web design and development.',
 };
 
 // What I offer clients (home grid). The first one is the lead service.
@@ -102,34 +112,34 @@ export const RECOMMENDATIONS = [
 ];
 
 export const SKILL_GROUPS = [
-  { label: 'Web Design', title: 'UI/UX-Led Website Design', image: uiUxWebDesign.src, alt: 'Illustration of a website wireframe adapting across desktop, tablet, and phone',
+  { label: 'Web Design', title: 'UI/UX-Led Website Design', image: uiUxWebDesign, alt: 'Illustration of a website wireframe adapting across desktop, tablet, and phone',
     body: 'I design websites with the same UI/UX principles I have applied for ten years on enterprise and public-sector products: clear page structure, visual hierarchy, readable typography, and journeys that lead visitors to act. Every layout is planned to work from desktop to mobile.',
     tagLabel: 'Skills', tags: ['Web design', 'UX principles', 'Landing pages', 'Responsive layouts', 'Typography & hierarchy', 'Figma'] },
-  { label: 'Modern Web Development', title: 'Fast Websites With a Headless CMS', image: headlessCms.src, alt: 'Illustration of CMS content flowing into a fast website deployed to the cloud',
+  { label: 'Modern Web Development', title: 'Fast Websites With a Headless CMS', image: headlessCms, alt: 'Illustration of CMS content flowing into a fast website deployed to the cloud',
     body: 'I build high-speed websites with Astro or Next.js and connect them to a headless CMS such as Sanity or Strapi, so clients can update content themselves. I also deploy and host the sites I build.',
     tagLabel: 'Skills', tags: ['Astro', 'Next.js', 'React JS', 'Sanity', 'Strapi', 'Hosting & deployment'] },
-  { label: 'E-commerce', title: 'Online Stores & Payment Integration', image: onlineStores.src, alt: 'Illustration of an online store with a shopping cart, product pages, and card payment',
+  { label: 'E-commerce', title: 'Online Stores & Payment Integration', image: onlineStores, alt: 'Illustration of an online store with a shopping cart, product pages, and card payment',
     body: 'For businesses that sell online, I build stores on Medusa.js or a custom shopping-cart CMS, and integrate the payment gateways they need.',
     tagLabel: 'Skills', tags: ['Medusa.js', 'Custom shopping-cart CMS', 'Payment gateway integration', 'Product catalogues'] },
-  { label: 'Branding', title: 'Logo & Brand Kit Design', image: brandKit.src, alt: 'Illustration of a logo grid, colour swatches, and a brand guidelines book',
+  { label: 'Branding', title: 'Logo & Brand Kit Design', image: brandKit, alt: 'Illustration of a logo grid, colour swatches, and a brand guidelines book',
     body: 'When a client needs an identity before the website, I design the logo and a brand kit (colours, typography, and usage) so the site and everything around it look consistent.',
     tagLabel: 'Skills', tags: ['Logo design', 'Brand kit', 'Colour & typography', 'Adobe Illustrator', 'Adobe Photoshop'] },
-  { label: 'Growth', title: 'SEO, Analytics & Social Campaigns', image: seoAnalytics.src, alt: 'Illustration of an analytics dashboard with growth charts and social media icons',
+  { label: 'Growth', title: 'SEO, Analytics & Social Campaigns', image: seoAnalytics, alt: 'Illustration of an analytics dashboard with growth charts and social media icons',
     body: 'A website should bring in business. I set up the SEO basics, such as sitemaps and metadata, connect Google Analytics, and run social media campaigns that send leads to the site.',
     tagLabel: 'Skills', tags: ['Sitemaps', 'On-page SEO', 'Google Analytics', 'Social media campaigns', 'Lead generation'] },
-  { label: 'User Experience Design', title: 'UX Research & Experience Planning', image: uxResearch.src, alt: 'Illustration of a user at the centre of journeys, research, and site structure',
+  { label: 'User Experience Design', title: 'UX Research & Experience Planning', image: uxResearch, alt: 'Illustration of a user at the centre of journeys, research, and site structure',
     body: 'I explore user needs and business requirements to help define more understandable digital experiences. My UX work includes user journeys, usability considerations, information structure, and wireframing.',
     tagLabel: 'Documented skills', tags: ['User research', 'Usability testing', 'User journeys', 'Wireframing', 'UX planning', 'Interaction design'] },
-  { label: 'Interface Design', title: 'UI Design & Prototyping', image: uiPrototyping.src, alt: 'Illustration of linked screen wireframes forming a clickable prototype',
+  { label: 'Interface Design', title: 'UI Design & Prototyping', image: uiPrototyping, alt: 'Illustration of linked screen wireframes forming a clickable prototype',
     body: 'I create interface concepts and detailed layouts that translate product requirements into usable screens. I work with both low- and high-fidelity wireframes and communicate interactive behavior through prototypes and design artifacts.',
     tagLabel: 'Documented skills', tags: ['Figma', 'Sketch', 'Visual design', 'Interaction design', 'Wireframing', 'Prototyping'] },
-  { label: 'Frontend Implementation', title: 'Frontend UI Development', image: frontendUi.src, alt: 'Illustration of a design turning into code and responsive screens',
+  { label: 'Frontend Implementation', title: 'Frontend UI Development', image: frontendUi, alt: 'Illustration of a design turning into code and responsive screens',
     body: 'I understand the development side of interface design and work to bridge the gap between design files and the browser. My professional experience includes transforming Figma designs into React components and developing responsive interfaces with HTML and CSS.',
     tagLabel: 'Documented skills', tags: ['HTML', 'CSS', 'JavaScript', 'React JS', 'Responsive web interfaces'] },
-  { label: 'Website Development', title: 'WordPress & Website Builds', image: wordpressBuilds.src, alt: 'Illustration of a website being built from page blocks and settings',
+  { label: 'Website Development', title: 'WordPress & Website Builds', image: wordpressBuilds, alt: 'Illustration of a website being built from page blocks and settings',
     body: 'I work on responsive websites, custom WordPress layouts, and website content or implementation updates. My experience includes converting visual designs into functional templates and managing websites after they are published.',
     tagLabel: 'Documented skills', tags: ['WordPress', 'Bootstrap', 'Next.js', 'Advanced Custom Fields (ACF)', 'WPBakery', 'Custom template development', 'Website maintenance', 'Hosting-related support'] },
-  { label: 'Delivery and Collaboration', title: 'Working With Product and Engineering Teams', image: teamwork.src, alt: 'Illustration of a team planning work together on a shared board',
+  { label: 'Delivery and Collaboration', title: 'Working With Product and Engineering Teams', image: teamwork, alt: 'Illustration of a team planning work together on a shared board',
     body: 'I collaborate with people from different disciplines to balance user expectations, business goals, deadlines, and implementation constraints. My work includes project coordination, scope awareness, and an Agile-oriented approach.',
     tagLabel: 'Documented skills', tags: ['Agile methodologies', 'Project management', 'Cross-functional collaboration', 'Design handoff'] },
 ];

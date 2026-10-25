@@ -5,7 +5,7 @@ import FormStatus from '../components/ds/FormStatus.astro';
 import Icon from '../components/ds/Icon.astro';
 import Tag from '../components/ds/Tag.astro';
 import TextField from '../components/ds/TextField.astro';
-import { INQUIRY, PROFILE, TITLES } from '../data/site';
+import { INQUIRY, PROFILE, DESCRIPTIONS, TITLES } from '../data/site';
 
 const links = [
   { label: 'LinkedIn', icon: 'linkedin', href: PROFILE.linkedin },
@@ -14,8 +14,10 @@ const links = [
   { label: 'Fiverr — Next.js websites', icon: 'briefcase-business', href: PROFILE.fiverrNext },
 ];
 const year = new Date().getFullYear();
+import { page, breadcrumbs, ids } from '../data/schema';
+const site = Astro.site!;
 ---
-<BaseLayout title={TITLES['/contact']} footer="none">
+<BaseLayout title={TITLES['/contact']} description={DESCRIPTIONS['/contact']} schema={[page(site, '/contact', 'ContactPage', TITLES['/contact'], DESCRIPTIONS['/contact'], { mainEntity: { '@id': ids(site).business } }), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }])]} footer="none">
   <section id="contact" class="contact">
     <div class="container">
       <h1 class="ds-display-hero enter" style="--delay:140ms;--from:translateY(5%)">Let’s work together.</h1>

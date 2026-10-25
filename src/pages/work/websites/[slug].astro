@@ -10,7 +10,8 @@ import CircleCta from '../../../components/ds/CircleCta.astro';
 import MediaFrame from '../../../components/ds/MediaFrame.astro';
 import PrevNext from '../../../components/ds/PrevNext.astro';
 import Lightbox from '../../../components/ds/Lightbox.astro';
-import { WEBSITES, desktopShot, mobileShot } from '../../../data/websites';
+import { WEBSITES, desktopShot, mobileShot, shareShot } from '../../../data/websites';
+import { page, breadcrumbs, caseStudy } from '../../../data/schema';
 
 export function getStaticPaths() {
   return WEBSITES.map((p, i) => ({
@@ -25,6 +26,14 @@ const fontsHref = p.fonts.google?.length
   ? 'https://fonts.googleapis.com/css2?' + p.fonts.google.map((f) => 'family=' + f.replace(/ /g, '+') + ':wght@300;400;500;600;700').join('&') + '&display=swap'
   : null;
 const fontStack = (f: string, fallback: string) => `'${f}', ${fallback}`;
+// Search title: keep the name and "Website Case Study"; add the brand only when it still fits in ~60 characters.
+const seoTitle = p.name.length <= 20 ? `${p.name} — Website Case Study | Raveen Nanayakkara` : `${p.name} — Website Design Case Study`;
+const site = Astro.site!;
+const schema = [
+  page(site, '/work/websites/' + p.slug, 'WebPage', seoTitle, p.summary, { mainEntity: { '@id': new URL('/work/websites/' + p.slug + '#casestudy', site).href } }),
+  caseStudy(site, p, shareShot(p.slug)),
+  breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Work', path: '/work' }, { name: p.name, path: '/work/websites/' + p.slug }]),
+];
 const host = p.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 const steps = [
   { id: 'overview', label: 'Overview' },
@@ -41,7 +50,7 @@ const isLight = (hex: string) => {
   return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) > 170;
 };
 ---
-<BaseLayout title={p.name + ' — Website case study — Raveen Nanayakkara'} description={p.summary}>
+<BaseLayout title={seoTitle} description={p.summary} type="article" image={shareShot(p.slug)} imageWidth={1440} imageHeight={900} imageAlt={`${p.name} website homepage`} schema={schema}>
   {fontsHref ? <link slot="head" rel="stylesheet" href={fontsHref} /> : null}
 
   <section class="hero">

@@ -7,10 +7,12 @@ import PageHero from '../../components/PageHero.astro';
 import SiteMockup from '../../components/SiteMockup.astro';
 import ArrowLink from '../../components/ds/ArrowLink.astro';
 import ProjectCard from '../../components/ds/ProjectCard.astro';
-import { TITLES } from '../../data/site';
+import { DESCRIPTIONS, TITLES } from '../../data/site';
 import { WEBSITES } from '../../data/websites';
+import { page, breadcrumbs, caseList } from '../../data/schema';
+const site = Astro.site!;
 ---
-<BaseLayout title={TITLES['/work']}>
+<BaseLayout title={TITLES['/work']} description={DESCRIPTIONS['/work']} schema={[page(site, '/work', 'CollectionPage', TITLES['/work'], DESCRIPTIONS['/work'], { mainEntity: caseList(site, WEBSITES) }), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Work', path: '/work' }])]}>
   <PageHero label="Work" title="Websites and digital products" bg="cream">
     <p class="ds-body-lg muted" style="max-width:56ch">Websites I’ve designed and built for businesses, each with a case study covering the user journey, wireframes, design system, and build.</p>
   </PageHero>
