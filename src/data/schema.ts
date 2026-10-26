@@ -21,7 +21,7 @@ export const ids = (site: URL) => {
 /** Site-wide nodes, included on every page. */
 export function baseGraph(site: URL): Node[] {
   const id = ids(site);
-  const sameAs = [PROFILE.linkedin, PROFILE.behance, PROFILE.fiverr];
+  const sameAs = [PROFILE.linkedin, PROFILE.behance, PROFILE.facebook, PROFILE.fiverr];
   return [
     {
       '@type': 'WebSite',

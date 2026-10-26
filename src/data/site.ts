@@ -19,6 +19,7 @@ export const PROFILE = {
   headline: 'Web Designer & Developer · UI/UX Engineer',
   linkedin: 'https://lk.linkedin.com/in/raveen-nanayakkara-262933101',
   behance: 'https://www.behance.net/raveennanayakkara',
+  facebook: 'https://www.facebook.com/raveen.design',
   fiverr: 'https://www.fiverr.com/pencil_veen',
   fiverrBootstrap: 'https://www.fiverr.com/pencil_veen/design-psd-to-bootstrap-conversion',
   fiverrNext: 'https://www.fiverr.com/pencil_veen/do-a-fast-seo-friendly-next-js-website-with-a-headless-cms',
@@ -26,6 +27,7 @@ export const PROFILE = {
 export const SOCIALS = [
   { icon: 'linkedin', label: 'LinkedIn', href: PROFILE.linkedin },
   { icon: 'palette', label: 'Behance', href: PROFILE.behance },
+  { icon: 'facebook', label: 'Facebook', href: PROFILE.facebook },
   { icon: 'briefcase-business', label: 'Fiverr', href: PROFILE.fiverr },
 ];
 
