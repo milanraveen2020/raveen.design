@@ -1,5 +1,6 @@
 // schema.org structured data (JSON-LD). One connected graph: the site, the person and the business share
 // stable @ids, so every page can point at them instead of repeating them.
+// No postal address: the business is remote and serves clients worldwide (areaServed), not a local market.
 // Deliberately no aggregateRating: Google ignores (and may penalise) ratings a business publishes about itself.
 import { PROFILE, SERVICES, EDUCATION, FAQ } from './site';
 import type { WebsiteCase } from './websites';
@@ -41,7 +42,6 @@ export function baseGraph(site: URL): Node[] {
       jobTitle: 'Web Designer & Developer',
       description: 'Web designer and developer with ten years of UI/UX engineering experience.',
       email: 'mailto:' + PROFILE.email,
-      address: { '@type': 'PostalAddress', addressLocality: 'Colombo', addressCountry: 'LK' },
       alumniOf: EDUCATION.map((e) => ({ '@type': 'CollegeOrUniversity', name: e.org.replace(/, UK$/, '') })),
       knowsAbout: ['Web design', 'Web development', 'UI/UX design', 'Astro', 'Next.js', 'React', 'Sanity', 'Strapi', 'Medusa.js', 'E-commerce', 'Branding', 'Search engine optimization', 'Google Analytics', 'WordPress', 'Figma'],
       sameAs,
@@ -52,11 +52,10 @@ export function baseGraph(site: URL): Node[] {
       name: 'Raveen.design',
       url: id.abs('/'),
       logo: id.abs('/apple-touch-icon.png'),
-      image: id.abs('/og-hero.jpg'),
+      image: id.abs('/og-share.jpg'),
       description: 'Freelance web design and development: UI/UX-led websites, headless CMS builds, e-commerce, branding, hosting, SEO and social media campaigns.',
       founder: { '@id': id.person },
       email: PROFILE.email,
-      address: { '@type': 'PostalAddress', addressLocality: 'Colombo', addressCountry: 'LK' },
       areaServed: 'Worldwide',
       sameAs,
     },

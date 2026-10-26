@@ -36,7 +36,7 @@ export const NAV = [
 
 // Search titles (≤ 60 characters) and meta descriptions (≤ 155) for each main page.
 export const TITLES: Record<string, string> = {
-  '/': 'Raveen Nanayakkara — Web Designer & Developer, Sri Lanka',
+  '/': 'Raveen Nanayakkara — Freelance Web Designer & Developer',
   '/work': 'Web Design Portfolio & Case Studies | Raveen Nanayakkara',
   '/about': 'About Raveen Nanayakkara — Web Designer & UI/UX Engineer',
   '/expertise': 'Web Design, Development & SEO Services | Raveen Nanayakkara',
@@ -65,8 +65,8 @@ export const FAQ = [
     a: 'Every site launches with the SEO essentials in place: a sitemap, page titles and descriptions, structured data, fast loading, and Google Analytics so you can see where visitors come from.' },
   { q: 'Do you host and look after websites after launch?',
     a: 'Yes. I can deploy and host your site and look after it afterwards, so you don’t have to deal with the technical side.' },
-  { q: 'Do you work with clients outside Sri Lanka?',
-    a: 'Yes. I’m based in Colombo, Sri Lanka, and work with clients remotely, wherever they are.' },
+  { q: 'Do you work with clients worldwide?',
+    a: 'Yes. I work remotely with clients wherever they are, including clients in the United States.' },
   { q: 'How do we get started?',
     a: 'Send a short message through the contact page about your business and what you need. I’ll reply to talk through your goals and the next steps.' },
 ];
