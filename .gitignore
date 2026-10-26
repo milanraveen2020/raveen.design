@@ -11,3 +11,6 @@ source/
 # Playwright
 test-results/
 playwright-report/
+
+# Social media posts (generated images and captions, kept out of the repo)
+social/
