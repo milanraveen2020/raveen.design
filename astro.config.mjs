@@ -23,13 +23,17 @@ export default defineConfig({
   ],
   // Pages stay static; only /api/contact runs as a Vercel function (it opts out with `prerender = false`).
   adapter: vercel(),
-  // Contact form email (Resend). Set these in Vercel → Settings → Environment Variables, and in .env locally.
+  // Contact form email (Resend) and analytics. Set these in Vercel → Settings → Environment Variables, and in .env locally.
   env: {
     schema: {
       RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       // Resend's test sender only delivers to the Resend account's own email (milanraveen@gmail.com) until a domain is verified.
       CONTACT_TO: envField.string({ context: 'server', access: 'secret', default: 'milanraveen@gmail.com' }),
       CONTACT_FROM: envField.string({ context: 'server', access: 'secret', default: 'Raveen.design <onboarding@resend.dev>' }),
+      // Google Analytics 4 (G-XXXXXXXXXX) and search-engine verification tokens. Baked in at build time: redeploy after changing.
+      PUBLIC_GA_MEASUREMENT_ID: envField.string({ context: 'client', access: 'public', optional: true }),
+      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({ context: 'client', access: 'public', optional: true }),
+      PUBLIC_BING_SITE_VERIFICATION: envField.string({ context: 'client', access: 'public', optional: true }),
     },
   },
   // Old URLs that moved.

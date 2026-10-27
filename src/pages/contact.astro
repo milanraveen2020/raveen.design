@@ -181,6 +181,7 @@ const site = Astro.site!;
         throw new Error(String(res.status));
       }
       form.hidden = true;
+      window.gtag?.('event', 'generate_lead', { form: 'contact', project_type: String(new FormData(form).get('type') ?? '') });
       if (sent) { sent.hidden = false; sent.focus(); }
     } catch {
       if (failed) { failed.hidden = false; failed.focus(); }

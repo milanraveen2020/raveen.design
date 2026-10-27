@@ -5,6 +5,8 @@ import SiteFooter from '../components/ds/SiteFooter.astro';
 import ChatShortcut from '../components/ds/ChatShortcut.astro';
 import ScrollProgress from '../components/ds/ScrollProgress.astro';
 import Button from '../components/ds/Button.astro';
+import Analytics from '../components/ds/Analytics.astro';
+import { PUBLIC_GA_MEASUREMENT_ID, PUBLIC_GOOGLE_SITE_VERIFICATION, PUBLIC_BING_SITE_VERIFICATION } from 'astro:env/client';
 import { NAV, PROFILE, SOCIALS } from '../data/site';
 import { baseGraph } from '../data/schema';
 
@@ -74,6 +76,8 @@ const jsonLd = Astro.site && !noindex ? JSON.stringify({ '@context': 'https://sc
     <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="author" content="Raveen Nanayakkara" />
+    {PUBLIC_GOOGLE_SITE_VERIFICATION ? <meta name="google-site-verification" content={PUBLIC_GOOGLE_SITE_VERIFICATION} /> : null}
+    {PUBLIC_BING_SITE_VERIFICATION ? <meta name="msvalidate.01" content={PUBLIC_BING_SITE_VERIFICATION} /> : null}
     {jsonLd ? <script type="application/ld+json" set:html={jsonLd} /> : null}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -82,6 +86,7 @@ const jsonLd = Astro.site && !noindex ? JSON.stringify({ '@context': 'https://sc
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <Analytics />
     <slot name="head" />
   </head>
   <body>
@@ -93,7 +98,7 @@ const jsonLd = Astro.site && !noindex ? JSON.stringify({ '@context': 'https://sc
         {footer === 'home' ? <p slot="note">Whether you’re improving a digital product, building a new website, or looking for someone who understands both design and frontend development, I’d be glad to hear about it.</p> : null}
         {footer === 'about' ? <p slot="note">I enjoy working with people who value thoughtful design, strong execution, and clear communication. If your project could benefit from that combination, let’s connect.</p> : null}
         {footer !== 'about' ? <div slot="actions" class="footer-actions"><Button variant="dark" href="/contact">{footer === 'home' ? 'Let’s Talk' : 'Get in Touch'}</Button></div> : null}
-        <Fragment slot="legal"><span>© {year} Raveen Nanayakkara. All rights reserved.</span><span>Thoughtful design. Practical development.</span></Fragment>
+        <Fragment slot="legal"><span>© {year} Raveen Nanayakkara. All rights reserved.{PUBLIC_GA_MEASUREMENT_ID ? <button type="button" class="cookie-settings" data-consent-open hidden>Cookie settings</button> : null}</span><span>Thoughtful design. Practical development.</span></Fragment>
       </SiteFooter>
     )}
     {bare ? null : <ChatShortcut href={PROFILE.whatsapp} />}
@@ -114,4 +119,6 @@ const jsonLd = Astro.site && !noindex ? JSON.stringify({ '@context': 'https://sc
 </html>
 <style>
   .footer-actions { display: flex; justify-content: center; margin-top: 28px; }
+  .cookie-settings { margin-left: 16px; padding: 0; border: none; background: none; font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .cookie-settings:hover { color: var(--ink-900); }
 </style>
