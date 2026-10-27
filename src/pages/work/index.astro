@@ -29,7 +29,7 @@ const site = Astro.site!;
       <div class="work-list sites">
         {WEBSITES.map((w, i) => (
           <Reveal>
-            <ProjectCard title={w.name} category={w.category} summary={w.summary} tone={w.tone} reverse={i % 2 === 1} cta="View Case Study" href={'/work/websites/' + w.slug}>
+            <ProjectCard title={w.name} summary={w.summary} tone={w.tone} reverse={i % 2 === 1} cta="View Case Study" href={'/work/websites/' + w.slug}>
               <SiteMockup slot="media" slug={w.slug} name={w.name} brand={w.brand} radius="var(--pc-radius)" />
             </ProjectCard>
           </Reveal>

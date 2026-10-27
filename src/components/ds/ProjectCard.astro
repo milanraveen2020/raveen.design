@@ -1,8 +1,8 @@
 ---
 // Overlapping image + info panel. Side-by-side on desktop, stacked under 768px. A `media` slot replaces the image.
 import MediaFrame from './MediaFrame.astro';
-interface Props { title: string; category: string; summary: string; image?: string; imageAlt?: string; tone?: string; reverse?: boolean; cta?: string; href: string }
-const { title, category, summary, image, imageAlt = '', tone = 'cream', reverse = false, cta = 'Discover', href } = Astro.props;
+interface Props { title: string; summary: string; image?: string; imageAlt?: string; tone?: string; reverse?: boolean; cta?: string; href: string }
+const { title, summary, image, imageAlt = '', tone = 'cream', reverse = false, cta = 'Discover', href } = Astro.props;
 ---
 <article class:list={['project-card', reverse && 'project-card--reverse']} data-hover-card>
   <a href={href} class="project-card-media" tabindex="-1" aria-hidden="true">
@@ -11,7 +11,6 @@ const { title, category, summary, image, imageAlt = '', tone = 'cream', reverse 
       : <MediaFrame src={image} alt={imageAlt} tone={tone} ratio="625 / 580" radius="var(--pc-radius)" placeholder="Project cover" />}
   </a>
   <a href={href} class="project-card-panel">
-    <span class="project-card-cat">{category}</span>
     <h3>{title}</h3>
     <p>{summary}</p>
     <div class="project-card-cta"><span class="project-card-rule"><span class="project-card-line"></span>{cta}</span></div>
@@ -24,7 +23,6 @@ const { title, category, summary, image, imageAlt = '', tone = 'cream', reverse 
   .project-card-panel { position: relative; z-index: 1; width: 44%; flex-shrink: 0; margin-left: -6%; background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
     padding: 56px 56px 52px; display: flex; flex-direction: column; gap: 18px; text-decoration: none; transition: transform 420ms var(--ease-out); }
   .project-card--reverse .project-card-panel { margin-left: 0; margin-right: -6%; }
-  .project-card-cat { display: none; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-500); }
   h3 { font-family: var(--font-display); font-weight: 500; font-size: 46px; line-height: 1.08; letter-spacing: -0.03em; color: var(--ink-900); margin: 0; }
   p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-700); max-width: 34ch; }
   .project-card-cta { margin-top: 18px; display: flex; justify-content: flex-end; }
@@ -40,7 +38,6 @@ const { title, category, summary, image, imageAlt = '', tone = 'cream', reverse 
     .project-card-media { width: 100%; }
     .project-card-panel, .project-card--reverse .project-card-panel { width: auto; margin: -32px 12px 0; border-radius: var(--radius-md); padding: 32px 28px; }
     .project-card:hover .project-card-panel, .project-card:focus-within .project-card-panel { transform: none; }
-    .project-card-cat { display: block; }
     h3 { font-size: 32px; }
     .project-card-cta { margin-top: 4px; justify-content: flex-start; }
   }
