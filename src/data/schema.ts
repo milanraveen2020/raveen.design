@@ -2,8 +2,9 @@
 // stable @ids, so every page can point at them instead of repeating them.
 // No postal address: the business is remote and serves clients worldwide (areaServed), not a local market.
 // Deliberately no aggregateRating: Google ignores (and may penalise) ratings a business publishes about itself.
-import { PROFILE, SERVICES, EDUCATION, FAQ } from './site';
+import { PROFILE, SERVICES, EDUCATION } from './site';
 import type { WebsiteCase } from './websites';
+import { updatedFor } from './updated';
 
 type Node = Record<string, unknown>;
 
@@ -73,7 +74,8 @@ export function breadcrumbs(site: URL, items: { name: string; path: string }[]):
 /** A WebPage-type node for the current page, linked to the site and the person. */
 export function page(site: URL, path: string, type: string, name: string, description: string, extra: Node = {}): Node {
   const id = ids(site);
-  return { '@type': type, '@id': id.abs(path) + '#webpage', url: id.abs(path), name, description, isPartOf: { '@id': id.website }, about: { '@id': id.person }, inLanguage: 'en', ...extra };
+  const modified = updatedFor(path);
+  return { '@type': type, '@id': id.abs(path) + '#webpage', url: id.abs(path), name, description, isPartOf: { '@id': id.website }, about: { '@id': id.person }, inLanguage: 'en', ...(modified ? { dateModified: modified } : {}), ...extra };
 }
 
 export function servicesCatalog(site: URL): Node {
@@ -107,6 +109,7 @@ export function caseStudy(site: URL, w: WebsiteCase, image: string): Node {
     // Live sites link out to the real website; prototypes don't claim one.
     ...(w.prototype ? {} : { sameAs: w.url }),
     isPartOf: { '@id': id.website },
+    dateModified: updatedFor(path),
   };
 }
 
@@ -118,11 +121,11 @@ export function caseList(site: URL, items: WebsiteCase[]): Node {
   };
 }
 
-export function faqPage(site: URL, path: string): Node {
+export function faqPage(site: URL, path: string, items: { q: string; a: string }[]): Node {
   const id = ids(site);
   return {
     '@type': 'FAQPage',
     '@id': id.abs(path) + '#faq',
-    mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    mainEntity: items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   };
 }

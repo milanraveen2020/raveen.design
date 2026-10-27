@@ -3,6 +3,7 @@ import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import securityHeaders from './integrations/security-headers.mjs';
+import { updatedFor } from './src/data/updated';
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,7 +18,14 @@ export default defineConfig({
   // One URL per page: /work, never /work/ (Vercel 308-redirects the slash version), matching every internal link.
   trailingSlash: 'never',
   integrations: [
-    sitemap({ filter: (page) => !/\/404\/?$/.test(page) }),
+    sitemap({
+      filter: (page) => !/\/404\/?$/.test(page),
+      // <lastmod> from src/data/updated.ts, so search engines know which pages changed.
+      serialize: (item) => {
+        const lastmod = updatedFor(new URL(item.url).pathname.replace(/\/$/, '') || '/');
+        return lastmod ? { ...item, lastmod } : item;
+      },
+    }),
     // After the Vercel adapter has written its routing file: add security headers to every response.
     securityHeaders(),
   ],

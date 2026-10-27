@@ -11,12 +11,13 @@ import Reveal from '../components/Reveal.astro';
 import ArrowLink from '../components/ds/ArrowLink.astro';
 import SiteMockup from '../components/SiteMockup.astro';
 import ProjectCard from '../components/ds/ProjectCard.astro';
-import { DESCRIPTIONS, TITLES } from '../data/site';
+import FaqList from '../components/FaqList.astro';
+import { DESCRIPTIONS, TITLES, FAQ_HOME } from '../data/site';
 import { WEBSITES } from '../data/websites';
-import { page } from '../data/schema';
+import { page, faqPage } from '../data/schema';
 const site = Astro.site!;
 ---
-<BaseLayout title={TITLES['/']} description={DESCRIPTIONS['/']} schema={[page(site, '/', 'WebPage', TITLES['/'], DESCRIPTIONS['/'])]} footer="home">
+<BaseLayout title={TITLES['/']} description={DESCRIPTIONS['/']} schema={[page(site, '/', 'WebPage', TITLES['/'], DESCRIPTIONS['/']), faqPage(site, '/', FAQ_HOME)]} footer="home">
   <HeroSplit />
 
   <HeroBridge />
@@ -54,6 +55,13 @@ const site = Astro.site!;
         ))}
       </div>
       <div class="work-more"><ArrowLink size="lg" href="/work">Explore All Work</ArrowLink></div>
+    </div>
+  </Section>
+
+  <!-- Questions about working together (also FAQPage structured data) -->
+  <Section bg="cream" id="faq">
+    <div class="container">
+      <FaqList items={FAQ_HOME} title="Working with me" intro="A few things people often ask before getting in touch." cta={{ label: 'More about my services', href: '/expertise#faq' }} />
     </div>
   </Section>
 </BaseLayout>

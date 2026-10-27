@@ -6,8 +6,7 @@ import PageHero from '../components/PageHero.astro';
 import MediaFrame from '../components/ds/MediaFrame.astro';
 import Tag from '../components/ds/Tag.astro';
 import SkillMarquee from '../components/ds/SkillMarquee.astro';
-import SectionHead from '../components/SectionHead.astro';
-import ArrowLink from '../components/ds/ArrowLink.astro';
+import FaqList from '../components/FaqList.astro';
 import { SKILL_GROUPS, SKILL_ROWS, FAQ, DESCRIPTIONS, TITLES } from '../data/site';
 import { page, breadcrumbs, servicesCatalog, faqPage } from '../data/schema';
 import { getImage } from 'astro:assets';
@@ -15,7 +14,7 @@ const site = Astro.site!;
 // The source illustrations are 1448px JPGs; ~1120px WebP covers the column at 2x for a fraction of the weight.
 const groups = await Promise.all(SKILL_GROUPS.map(async (g) => ({ ...g, image: (await getImage({ src: g.image, width: 1120, format: 'webp', quality: 80 })).src })));
 ---
-<BaseLayout title={TITLES['/expertise']} description={DESCRIPTIONS['/expertise']} schema={[page(site, '/expertise', 'WebPage', TITLES['/expertise'], DESCRIPTIONS['/expertise'], { mainEntity: { '@id': new URL('/expertise#services', site).href } }), servicesCatalog(site), faqPage(site, '/expertise'), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Expertise', path: '/expertise' }])]}>
+<BaseLayout title={TITLES['/expertise']} description={DESCRIPTIONS['/expertise']} schema={[page(site, '/expertise', 'WebPage', TITLES['/expertise'], DESCRIPTIONS['/expertise'], { mainEntity: { '@id': new URL('/expertise#services', site).href } }), servicesCatalog(site), faqPage(site, '/expertise', FAQ), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Expertise', path: '/expertise' }])]}>
   <PageHero label="Expertise" title="From brand to launch">
     <p class="ds-body-lg muted" style="max-width:58ch">My work covers the whole life of a website: brand, UI/UX-led design, fast development with a headless CMS, e-commerce, hosting, SEO, and the campaigns that bring in leads. Behind it all are ten years of UI/UX engineering on complex digital products.</p>
   </PageHero>
@@ -42,40 +41,14 @@ const groups = await Promise.all(SKILL_GROUPS.map(async (g) => ({ ...g, image: (
   </Section>
 
   <Section bg="cream" id="faq">
-    <div class="container faq">
-      <SectionHead label="FAQ" title="Common questions">
-        <p class="ds-body-lg muted" style="max-width:40ch">Can’t find what you’re looking for? Ask me directly.</p>
-        <ArrowLink href="/contact">Get in touch</ArrowLink>
-      </SectionHead>
-      <Reveal class="faq-list">
-        {FAQ.map((f) => (
-          <details class="faq-item">
-            <summary><h3>{f.q}</h3><span class="faq-icon" aria-hidden="true"></span></summary>
-            <p>{f.a}</p>
-          </details>
-        ))}
-      </Reveal>
+    <div class="container">
+      <FaqList items={FAQ} intro="Can’t find what you’re looking for? Ask me directly." cta={{ label: 'Get in touch', href: '/contact' }} />
     </div>
   </Section>
 </BaseLayout>
 <style>
   /* Hairline in the illustrations' own clay, so the sand images have a soft edge on the sand section */
   :global(.group-media) :global(.media-frame) { border: 1px solid #D9BCA6; }
-  .faq { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
-  .faq-item { border-top: 1px solid var(--line); }
-  .faq-item:last-child { border-bottom: 1px solid var(--line); }
-  .faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; cursor: pointer; list-style: none; }
-  .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item h3 { margin: 0; font-family: var(--font-display); font-size: 20px; font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; color: var(--ink-900); }
-  .faq-icon { position: relative; flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-card); transition: background 220ms var(--ease-out); }
-  .faq-icon::before, .faq-icon::after { content: ''; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.5px; background: var(--ink-900); transform: translate(-50%, -50%); transition: transform 220ms var(--ease-out), background 220ms var(--ease-out); }
-  .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); }
-  .faq-item[open] .faq-icon { background: var(--accent-coral); }
-  .faq-item[open] .faq-icon::before, .faq-item[open] .faq-icon::after { background: #fff; }
-  .faq-item[open] .faq-icon::after { transform: translate(-50%, -50%) rotate(0deg); }
-  .faq-item p { margin: 0; padding: 0 56px 28px 0; max-width: 62ch; color: var(--ink-700); }
-  @media (max-width: 991px) { .faq { grid-template-columns: 1fr; gap: 40px; } }
-  @media (max-width: 767px) { .faq-item h3 { font-size: 18px; } .faq-item p { padding-right: 0; } }
   .marquee { background: var(--canvas-blush); padding: 20px 0 140px; overflow: hidden; }
   .groups { display: flex; flex-direction: column; gap: 160px; }
   .group { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 96px; align-items: center; }

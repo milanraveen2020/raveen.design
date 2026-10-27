@@ -52,25 +52,62 @@ export const DESCRIPTIONS: Record<string, string> = {
   '/contact': 'Need a new website, online store or brand? Tell me about your business and project, and I’ll reply with next steps. Freelance web design and development.',
 };
 
-// What I offer clients (home grid). The first one is the lead service.
-// Expertise page FAQ. Answers only state what the site already says elsewhere; add pricing or timelines here once decided.
+// FAQs, one set per page (each question appears on one page only, as Google expects for FAQ markup).
+// Answers only state what the site already says elsewhere. Deliberately no prices, timelines or working hours.
+// Home: who I am and what working with me is like.
+export const FAQ_HOME = [
+  { q: 'Who is Raveen Nanayakkara?',
+    a: 'A freelance web designer and developer with ten years of experience as a UI/UX engineer at MillenniumIT ESP and Parkway Labs. I design and build fast, modern websites for businesses and look after everything around them, from branding to hosting and SEO.' },
+  { q: 'Do you handle both the design and the development?',
+    a: 'Yes. I design the website in Figma, build it, host it and launch it myself, so nothing gets lost between a designer and a separate developer. If you need a logo or brand kit first, I can do that too.' },
+  { q: 'What makes your websites different?',
+    a: 'They are UI/UX-led: every page is planned around how your visitors think, with clear structure and journeys that lead them to get in touch or buy. They are built with modern technology such as Astro and Next.js, so they load fast, and they launch with SEO and Google Analytics in place.' },
+  { q: 'What kinds of businesses have you built websites for?',
+    a: 'Restaurants, healthcare, enterprise IT, home services, a jewellery store, a private club, a school and a wedding invitation platform. You can see each project, with its user journey, wireframe and design system, on the Work page.' },
+  { q: 'What do clients say about working with you?',
+    a: 'I am rated 5.0 across 100 client reviews on Fiverr. Clients mention clear communication, attention to detail, and websites that work well on both desktop and mobile.' },
+  { q: 'Do you work with clients worldwide?',
+    a: 'Yes. I work remotely with clients wherever they are, including clients in the United States.' },
+];
+
+// Expertise: services and technology.
 export const FAQ = [
   { q: 'What services do you offer?',
     a: 'UI/UX-led website design, fast websites built with a headless CMS, online stores with payment integration, logo and brand kits, SEO and analytics setup, social media campaigns, and hosting with ongoing care.' },
   { q: 'Which technologies do you build websites with?',
     a: 'Mostly Astro or Next.js, with Sanity or Strapi as the content system. Online stores run on Medusa.js or a custom shopping-cart CMS. I also build and update WordPress sites, and design everything in Figma first.' },
+  { q: 'What is a headless CMS?',
+    a: 'A content editor that is separate from the website’s design and code. You log in to a tool such as Sanity or Strapi to change text, images and pages, and the website updates without anyone touching code. It keeps the site fast and secure while staying easy to edit.' },
+  { q: 'Why Astro or Next.js instead of WordPress?',
+    a: 'Astro and Next.js produce pages that load very quickly and need far fewer plugins and updates to stay secure, which helps both visitors and search rankings. WordPress is still a good fit for some projects, and I build and maintain WordPress sites too.' },
   { q: 'Can I update the website content myself?',
     a: 'Yes. Sites built with a headless CMS such as Sanity or Strapi come with an editor where you can change text, images and pages yourself, without touching code.' },
+  { q: 'Will my website work well on phones?',
+    a: 'Yes. Every layout is planned to work from desktop down to mobile, since many visitors arrive on a phone.' },
+  { q: 'Can you build an online store?',
+    a: 'Yes. I build online stores on Medusa.js or a custom shopping-cart CMS, with product catalogues and the payment gateways your business needs, integrated and tested.' },
+  { q: 'Can you help with my existing WordPress website?',
+    a: 'Yes. I can update content and layouts, build custom templates, and look after the site after it is published.' },
   { q: 'I don’t have a logo or brand yet. Can you help?',
     a: 'Yes. I can design your logo and a brand kit first, so the website starts with a clear identity: colours, typography and how your brand should look across pages and social media.' },
   { q: 'Will my website be ready for Google?',
     a: 'Every site launches with the SEO essentials in place: a sitemap, page titles and descriptions, structured data, fast loading, and Google Analytics so you can see where visitors come from.' },
   { q: 'Do you host and look after websites after launch?',
     a: 'Yes. I can deploy and host your site and look after it afterwards, so you don’t have to deal with the technical side.' },
-  { q: 'Do you work with clients worldwide?',
-    a: 'Yes. I work remotely with clients wherever they are, including clients in the United States.' },
+];
+
+// Contact: how a project starts and runs.
+export const FAQ_CONTACT = [
   { q: 'How do we get started?',
-    a: 'Send a short message through the contact page about your business and what you need. I’ll reply to talk through your goals and the next steps.' },
+    a: 'Send a short message through the form on this page about your business and what you need. I’ll reply to talk through your goals and the next steps.' },
+  { q: 'What should I include in my message?',
+    a: 'A little about your business, the kind of project you have in mind, and what you want the website to achieve. If you have a current website or sites you like, add a link. It’s fine if you don’t have everything worked out yet.' },
+  { q: 'Can I contact you on WhatsApp or by email instead?',
+    a: 'Yes. You can message me on WhatsApp or email me directly using the details on this page.' },
+  { q: 'How does a website project run?',
+    a: 'In five steps: brand (a logo and brand kit, if you need one), design (wireframes and visual design in Figma), build (Astro or Next.js with a headless CMS), launch (hosting, SEO and Google Analytics), and grow (campaigns that bring leads to the site).' },
+  { q: 'Do I need to know anything technical?',
+    a: 'No. I take care of the design, development, hosting and setup, and explain anything you need to know in plain language.' },
 ];
 
 export const SERVICES = [

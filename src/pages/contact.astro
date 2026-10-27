@@ -6,7 +6,8 @@ import Icon from '../components/ds/Icon.astro';
 import Tag from '../components/ds/Tag.astro';
 import TextField from '../components/ds/TextField.astro';
 import WhatsAppIcon from '../components/ds/WhatsAppIcon.astro';
-import { INQUIRY, PROFILE, DESCRIPTIONS, TITLES } from '../data/site';
+import FaqList from '../components/FaqList.astro';
+import { INQUIRY, PROFILE, DESCRIPTIONS, TITLES, FAQ_CONTACT } from '../data/site';
 import { LIMITS } from '../lib/contact';
 
 const links = [
@@ -17,10 +18,10 @@ const links = [
   { label: 'Fiverr — Next.js websites', icon: 'briefcase-business', href: PROFILE.fiverrNext },
 ];
 const year = new Date().getFullYear();
-import { page, breadcrumbs, ids } from '../data/schema';
+import { page, breadcrumbs, ids, faqPage } from '../data/schema';
 const site = Astro.site!;
 ---
-<BaseLayout title={TITLES['/contact']} description={DESCRIPTIONS['/contact']} schema={[page(site, '/contact', 'ContactPage', TITLES['/contact'], DESCRIPTIONS['/contact'], { mainEntity: { '@id': ids(site).business } }), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }])]} footer="none">
+<BaseLayout title={TITLES['/contact']} description={DESCRIPTIONS['/contact']} schema={[page(site, '/contact', 'ContactPage', TITLES['/contact'], DESCRIPTIONS['/contact'], { mainEntity: { '@id': ids(site).business } }), faqPage(site, '/contact', FAQ_CONTACT), breadcrumbs(site, [{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }])]} footer="none">
   <section id="contact" class="contact">
     <div class="container">
       <h1 class="ds-display-hero enter" style="--delay:140ms;--from:translateY(5%)">Let’s work together.</h1>
@@ -66,6 +67,8 @@ const site = Astro.site!;
         </aside>
       </div>
 
+      <div class="contact-faq"><FaqList items={FAQ_CONTACT} title="Before you get in touch" /></div>
+
       <div class="contact-legal"><span>© {year} Raveen Nanayakkara. All rights reserved.</span><span>Thoughtful design. Practical development.</span></div>
     </div>
   </section>
@@ -102,6 +105,7 @@ const site = Astro.site!;
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: -1px; padding: 0; white-space: nowrap; }
   .contact-links { display: flex; flex-direction: column; gap: 2px; margin-top: 10px; }
   .contact-link { gap: 12px; font-size: 17px; }
+  .contact-faq { margin-top: 160px; }
   .contact-legal { margin-top: 160px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--ink-500); }
   @media (max-width: 991px) { .contact-grid { grid-template-columns: 1fr; gap: 64px; } }
   @media (max-width: 767px) {
@@ -109,7 +113,7 @@ const site = Astro.site!;
     .contact-grid { margin-top: 56px; }
     .contact-form { grid-template-columns: 1fr; }
     .contact-form :global(.submit) { display: flex; width: 100%; }
-    .contact-legal { margin-top: 96px; }
+    .contact-faq, .contact-legal { margin-top: 96px; }
   }
   @media (max-width: 479px) { .contact-email, .contact-wa { font-size: 20px; } }
 </style>

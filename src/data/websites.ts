@@ -25,6 +25,8 @@ export interface WebsiteCase {
    *  Shown as a "Results" chapter only when present, so only add real, verifiable numbers. */
   results?: { value: string; label: string }[];
   extraImages?: { src: string; alt: string; title: string }[];
+  /** YYYY-MM-DD when this case study last changed; defaults to CASE_STUDIES_UPDATED in updated.ts. */
+  updated?: string;
 }
 
 // On-page screenshots are WebP (about a third of the JPG weight). The JPG stays for og:image and schema,
